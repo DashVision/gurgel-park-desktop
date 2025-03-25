@@ -1,1 +1,0 @@
-# gurgel-park-desktop
