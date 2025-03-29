@@ -3,11 +3,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 class LoginViews(QWidget):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
-
+        self.controller = controller
         self.main_layout = QHBoxLayout() 
-        self.form_layout = QVBoxLayout()  
+        self.form_layout = QVBoxLayout()
 
         self.initScreen()
 
@@ -22,8 +22,8 @@ class LoginViews(QWidget):
         pixmap = QPixmap('icons\depositphotos_23701387-stock-photo-man-with-car-keys.jpg')  
         self.img_label.setPixmap(pixmap)
         self.img_label.setAlignment(Qt.AlignLeft)
-        self.img_label.setScaledContents(True)  # Ajusta a imagem para o tamanho da label
-        self.img_label.setFixedSize(400, 500)  # Tamanho máximo da label
+        self.img_label.setScaledContents(True)  
+        self.img_label.setFixedSize(400, 500)  
 
         self.welcome_generic_text = QLabel("Seja bem-vindo ao Gurgel Park")
         self.welcome_generic_text.setAlignment(Qt.AlignCenter)
@@ -41,9 +41,11 @@ class LoginViews(QWidget):
 
         self.confirm_btn = QPushButton("Confirmar")
         self.confirm_btn.setObjectName("confirm_btn")
+        self.confirm_btn.clicked.connect(self.handle_login)
         self.form_layout.addWidget(self.confirm_btn)
         
         self.goto_register_btn = QPushButton("Ainda não possui login? Realize o cadastro!")
+        self.goto_register_btn.clicked.connect(self.handle_goto_register)
         self.form_layout.addWidget(self.goto_register_btn)
 
         self.recovery_password_btn = QPushButton("Esqueceu sua senha?")
@@ -57,7 +59,7 @@ class LoginViews(QWidget):
         self.setStyleSheet("""
             /* Estilo geral */
             QWidget {
-                background-color: #f5f5f5;
+                background: transparent;
                 color: #333;
                 font-family: 'Arial', sans-serif;
             }
@@ -82,16 +84,12 @@ class LoginViews(QWidget):
                 padding: 10px;
                 font-size: 16px;
                 color: #333;
-                background-color: #fff;
+                background-color: white;
                 margin: 10px 0;
                 max-width: 400px;
             }
 
-            QLineEdit:focus {
-                border-color: #4CAF50;
-            }
-
-            /* Botão Confirmar */
+            /* Botão principal */
             QPushButton#confirm_btn {
                 background-color: #4CAF50;
                 color: white;
@@ -109,48 +107,30 @@ class LoginViews(QWidget):
                 background-color: #45a049;
             }
 
-            /* Botões de fundo invisível */
-            QPushButton:!pressed {
+            /* Botões de texto */
+            QPushButton {
                 background: none;
                 color: #4CAF50;
                 border: none;
                 font-size: 14px;
                 padding: 10px;
                 text-align: center;
-                width: 200px;
-                align-self: center;
             }
 
-            QPushButton:!pressed:hover {
+            QPushButton:hover {
                 text-decoration: underline;
             }
-
-            /* Estilo para o texto de fundo invisível */
-            QPushButton#goto_register_btn {
-                font-size: 14px;
-                margin-top: 10px;
-                text-align: center;
-            }
-
-            QPushButton#recovery_password_btn {
-                font-size: 14px;
-                margin-top: 5px;
-                text-align: center;
-            }
-
-            /* Formatação do layout */
-            QVBoxLayout {
-                padding: 20px;
-                align-items: center;
-            }
-
-            /* Ajustando o layout da tela para centralizar os campos de login */
-            QHBoxLayout {
-                justify-content: center;
-            }
-
-            /* Adicionando espaçamento entre os botões */
-            QPushButton {
-                margin-top: 15px;
-            }
         """)
+
+    def handle_login(self):
+        email = self.email_input.text()
+        password = self.password_input.text()
+
+        if not all([email, password]):
+            QMessageBox.warning(self, "Erro", "Por favor, preencha todos os campos!")
+            return
+
+        QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+
+    def handle_goto_register(self):
+        self.controller.switch_to_register()
