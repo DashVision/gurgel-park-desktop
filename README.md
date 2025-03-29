@@ -58,6 +58,3 @@ python main.py
 
 ## Licença
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-
-Link do Projeto: [https://github.com/seu-usuario/gurgel-park-desktop](https://github.com/seu-usuario/gurgel-park-desktop)
