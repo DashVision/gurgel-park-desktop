@@ -1,11 +1,12 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from views.LoginScreen import LoginViews
-
+from controller.ScreensController import ScreensController
 
 def main():
     app = QApplication(sys.argv)
-    window = LoginViews()
+    controller = ScreensController()
+    
+    window = controller.get_stacked_widget()
     window.show()
 
     sys.exit(app.exec_())
