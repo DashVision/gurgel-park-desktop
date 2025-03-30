@@ -1,1 +1,0 @@
-Implementar lógica de login e cadastro, logo após finalizar cadastro de carros.
