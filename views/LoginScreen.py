@@ -49,6 +49,7 @@ class LoginViews(QWidget):
         self.form_layout.addWidget(self.goto_register_btn)
 
         self.recovery_password_btn = QPushButton("Esqueceu sua senha?")
+        self.recovery_password_btn.clicked.connect(self.handle_goto_recovery)
         self.form_layout.addWidget(self.recovery_password_btn)
 
         self.main_layout.addWidget(self.img_label) 
@@ -134,3 +135,6 @@ class LoginViews(QWidget):
 
     def handle_goto_register(self):
         self.controller.switch_to_register()
+
+    def handle_goto_recovery(self):
+        self.controller.switch_to_recovery()
