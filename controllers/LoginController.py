@@ -7,6 +7,7 @@ class LoginController:
 
         self.verifyIfUser(self.email, self.password)
 
-    def verifyIfUser(self, email, password):
+    @staticmethod
+    def verifyIfUser(email, password):
         return UsersModel.readUser(email, password)
     

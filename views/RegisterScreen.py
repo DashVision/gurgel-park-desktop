@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+from controllers.RegisterController import RegisterController
+
 class RegisterViews(QWidget):
     def __init__(self, controller):
         super().__init__()
@@ -140,6 +142,7 @@ class RegisterViews(QWidget):
             QMessageBox.warning(self, "Erro", "As senhas não coincidem!")
             return
 
+        RegisterController.createUser(name, email, password)
         QMessageBox.information(self, "Sucesso", "Registro realizado com sucesso!")
         self.handle_goto_login()
 

@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+from controllers.LoginController import LoginController
+
 class LoginViews(QWidget):
     def __init__(self, controller):
         super().__init__()
@@ -131,7 +133,14 @@ class LoginViews(QWidget):
             QMessageBox.warning(self, "Erro", "Por favor, preencha todos os campos!")
             return
 
-        QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+        login_auth = LoginController.verifyIfUser(email, password)
+        
+        if login_auth:
+            QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+            # Fazer ir para a tela inicial
+            return
+        
+        QMessageBox.warning(self, "Erro", "Email ou senha incorretos!")
 
     def handle_goto_register(self):
         self.controller.switch_to_register()

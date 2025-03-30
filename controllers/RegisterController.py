@@ -8,5 +8,6 @@ class RegisterController:
 
         self.createUser(self.name, self.email, self.password)
 
+    @staticmethod
     def createUser(name, email, password):
-        return UsersModel.createUser(name, email, password)
+        return UsersModel().createUser(name, email, password)
