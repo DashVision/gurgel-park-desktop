@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-from controllers.RegisterController import RegisterController
+from controllers.auth.RegisterController import RegisterController
 
 class RegisterViews(QWidget):
     def __init__(self, controller):
@@ -17,10 +17,10 @@ class RegisterViews(QWidget):
         self.setWindowTitle("Registro")
         self.setWindowIcon(QIcon(""))
         self.setFixedSize(1000, 500)
-        self.setWindowIcon(QIcon('icons\carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         self.img_label = QLabel(self)
-        pixmap = QPixmap('icons\depositphotos_23701387-stock-photo-man-with-car-keys.jpg')
+        pixmap = QPixmap('views/assets/depositphotos_23701387-stock-photo-man-with-car-keys.jpg')
         self.img_label.setPixmap(pixmap)
         self.img_label.setAlignment(Qt.AlignLeft)
         self.img_label.setScaledContents(True)

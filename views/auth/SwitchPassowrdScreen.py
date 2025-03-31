@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-from controllers.RecoveryController import RecoveryController
+from controllers.auth.RecoveryController import RecoveryController
 
 class SwitchPasswordView(QWidget):
     def __init__(self, controller, email):
@@ -18,7 +18,7 @@ class SwitchPasswordView(QWidget):
         self.setWindowIcon(QIcon(""))
         
         self.setFixedSize(500, 500)
-        self.setWindowIcon(QIcon('icons/carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         container = QWidget()
         container_layout = QVBoxLayout()

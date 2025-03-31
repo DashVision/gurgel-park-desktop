@@ -1,4 +1,4 @@
-from models.Users import UsersModel
+from models.auth.Users import UsersModel
 
 class LoginController:
     def __init__(self, email, password):

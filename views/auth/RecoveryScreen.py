@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-from controllers.RecoveryController import RecoveryController
+from controllers.auth.RecoveryController import RecoveryController
 
 class RecoveryView(QWidget):
     def __init__(self, controller):
@@ -15,7 +15,7 @@ class RecoveryView(QWidget):
     def initScreen(self):
         self.setWindowTitle("Recupere sua senha")
         self.setFixedSize(500, 500)
-        self.setWindowIcon(QIcon('icons/carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
         self.setStyleSheet("""
             QWidget {
                 background-color: #f0f0f0;
@@ -57,7 +57,7 @@ class RecoveryView(QWidget):
         container_layout.setAlignment(Qt.AlignCenter)
 
         logo_label = QLabel()
-        logo_pixmap = QPixmap('icons/carro-sedan-na-frente.png')
+        logo_pixmap = QPixmap('views/assets/carro-sedan-na-frente.png')
         if not logo_pixmap.isNull():
             logo_label.setPixmap(logo_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         
@@ -91,7 +91,7 @@ class RecoveryView(QWidget):
         self.setWindowTitle("Confirme o código recebido")
         self.setWindowIcon(QIcon(" "))
         self.setFixedSize(500, 750)
-        self.setWindowIcon(QIcon('icons/carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         if self.layout():
             QWidget().setLayout(self.layout())
@@ -101,7 +101,7 @@ class RecoveryView(QWidget):
         container_layout.setAlignment(Qt.AlignCenter)
 
         logo_label = QLabel()
-        logo_pixmap = QPixmap('icons/carro-sedan-na-frente.png')
+        logo_pixmap = QPixmap('views/assets/carro-sedan-na-frente.png')
         if not logo_pixmap.isNull():
             logo_label.setPixmap(logo_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         logo_label.setAlignment(Qt.AlignCenter)

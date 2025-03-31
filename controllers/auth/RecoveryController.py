@@ -1,5 +1,5 @@
-from models.RecoverySenderCode import CodeSenders
-from models.Users import UsersModel
+from models.auth.RecoverySenderCode import CodeSenders
+from models.auth.Users import UsersModel
 
 class RecoveryController:
     def __init__(self, email):

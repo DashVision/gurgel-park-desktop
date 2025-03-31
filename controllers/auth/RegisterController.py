@@ -1,4 +1,4 @@
-from models.Users import UsersModel
+from models.auth.Users import UsersModel
 
 class RegisterController:
     def __init__(self, name, email, password):
