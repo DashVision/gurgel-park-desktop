@@ -27,12 +27,35 @@ class ScreensController:
         self.stacked_widget.setCurrentWidget(self.login_screen)
 
     def switch_to_login(self):
+        if self.switch_password_screen:
+            self.stacked_widget.removeWidget(self.switch_password_screen)
+            self.switch_password_screen = None
+            
+        try:
+            if hasattr(self, 'recovery_screen') and self.recovery_screen is not None:
+                self.recovery_screen.clearFields()
+        except RuntimeError:
+            pass
+        
         self.stacked_widget.setCurrentWidget(self.login_screen)
 
     def switch_to_register(self):
         self.stacked_widget.setCurrentWidget(self.register_screen)
 
     def switch_to_recovery(self):
+        try:
+            # Remove a tela de recuperação atual do stacked widget
+            self.stacked_widget.removeWidget(self.recovery_screen)
+            
+            # Cria uma nova instância da tela de recuperação
+            self.recovery_screen = RecoveryView(self)
+            
+            # Adiciona a nova tela ao stacked widget na mesma posição (índice 2)
+            self.stacked_widget.insertWidget(2, self.recovery_screen)
+        except:
+            pass
+            
+        # Muda para a tela de recuperação
         self.stacked_widget.setCurrentWidget(self.recovery_screen)
 
     def switch_to_swpassword(self, email):

@@ -19,10 +19,49 @@ class SwitchPasswordView(QWidget):
         
         self.setFixedSize(500, 500)
         self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #f0f0f0;
+                font-family: 'Arial', sans-serif;
+            }
+            QLabel {
+                font-size: 24px;
+                color: #333;
+                margin: 20px;
+            }
+            QLineEdit {
+                padding: 10px;
+                border: 2px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+                margin: 10px;
+                background-color: white;
+            }
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                padding: 12px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                margin: 10px;
+                cursor: pointer;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
 
         container = QWidget()
         container_layout = QVBoxLayout()
         container_layout.setAlignment(Qt.AlignCenter)
+
+        logo_label = QLabel()
+        logo_pixmap = QPixmap('views/assets/carro-sedan-na-frente.png')
+        if not logo_pixmap.isNull():
+            logo_label.setPixmap(logo_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        logo_label.setAlignment(Qt.AlignCenter)
+        container_layout.addWidget(logo_label)
 
         self.generic_text = QLabel("Escolha uma nova senha: ")
         self.generic_text.setAlignment(Qt.AlignCenter)
@@ -30,6 +69,7 @@ class SwitchPasswordView(QWidget):
 
         self.new_password_input = QLineEdit()
         self.new_password_input.setPlaceholderText("Insira sua nova senha: ")
+        self.new_password_input.setEchoMode(QLineEdit.Password)
         container_layout.addWidget(self.new_password_input)
 
         self.confirm_btn = QPushButton("Confirmar nova senha")
@@ -41,6 +81,14 @@ class SwitchPasswordView(QWidget):
 
         self.confirm_btn.clicked.connect(lambda: self.handle_switch_password(self.new_password_input.text()))
 
+    def clearFields(self):
+        self.new_password_input.clear()
+
+    def disableFields(self):
+        self.new_password_input.setEnabled(False)
+        self.confirm_btn.setEnabled(False)
+        self.confirm_btn.setText("Senha atualizada com sucesso!")
+
     def handle_switch_password(self, new_password):
         if not new_password:
             QMessageBox.warning(self, "Erro", "Por favor, insira uma nova senha")
@@ -51,6 +99,8 @@ class SwitchPasswordView(QWidget):
 
         if update_password:
             QMessageBox.information(self, "Sucesso", "Senha atualizada com sucesso!")
+            self.disableFields()
             self.controller.switch_to_login()
+            
         else:
             QMessageBox.warning(self, "Erro", "Falha ao atualizar a senha")

@@ -60,17 +60,26 @@ class UsersModel:
         return self.cursor.lastrowid
     
     @staticmethod
-    def readUser(email, password):
+    def readUser(email, password=None):
         users_model = UsersModel()
         if users_model.cursor is None:
             raise Exception("Não é possível verificar o usuário no momento")
         
-        sql_select = "SELECT * FROM users WHERE email = %s AND senha = %s"
-        sql_values = (email, password)
-        
-        users_model.cursor.execute(sql_select, sql_values)
-        result = users_model.cursor.fetchone()
-        
+
+        if password is not None:
+            sql_select = "SELECT * FROM users WHERE email = %s AND senha = %s"
+            sql_values = (email, password)
+            
+            users_model.cursor.execute(sql_select, sql_values)
+            result = users_model.cursor.fetchone()
+
+        else:
+            sql_select = "SELECT * FROM users WHERE email = %s"
+            sql_values = (email,)
+
+            users_model.cursor.execute(sql_select, sql_values)
+            result = users_model.cursor.fetchone()
+
         return result if result else None
 
     def updateUserPassword(self, email, new_password):
@@ -80,10 +89,13 @@ class UsersModel:
         sql_update = f"UPDATE users SET senha = %s WHERE email = %s"
         sql_values = (new_password, email)
         
-        self.cursor.execute(sql_update, sql_values)
-        self.connection.commit()
-        
-        return self.cursor.lastrowid
+        try:
+            self.cursor.execute(sql_update, sql_values)
+            self.connection.commit()
+            return True
+        except Exception as e:
+            print(f"Erro ao atualizar senha: {e}")
+            return False
     
     def createCar(self, car_model, car_brand, car_year):
         if self.cursor is None:

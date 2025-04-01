@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 from controllers.auth.RecoveryController import RecoveryController
+from controllers.auth.LoginController import LoginController
 
 class RecoveryView(QWidget):
     def __init__(self, controller):
@@ -10,6 +11,8 @@ class RecoveryView(QWidget):
         
         self.controller = controller
         self.main_layout = QVBoxLayout()
+        self.second_layout = QVBoxLayout()
+        
         self.initScreen()
 
     def initScreen(self):
@@ -19,6 +22,7 @@ class RecoveryView(QWidget):
         self.setStyleSheet("""
             QWidget {
                 background-color: #f0f0f0;
+                font-family: 'Arial', sans-serif;
             }
             QLabel {
                 font-size: 24px;
@@ -31,6 +35,7 @@ class RecoveryView(QWidget):
                 border-radius: 5px;
                 font-size: 16px;
                 margin: 10px;
+                background-color: white;
             }
             QPushButton {
                 background-color: #4CAF50;
@@ -40,6 +45,7 @@ class RecoveryView(QWidget):
                 border-radius: 5px;
                 font-size: 16px;
                 margin: 10px;
+                cursor: pointer;
             }
             QPushButton:hover {
                 background-color: #45a049;
@@ -87,10 +93,8 @@ class RecoveryView(QWidget):
         self.goback_btn.clicked.connect(self.handle_goback)
 
     def codeConfirmScreen(self, code, email):
-        print(code)
         self.setWindowTitle("Confirme o código recebido")
-        self.setWindowIcon(QIcon(" "))
-        self.setFixedSize(500, 750)
+        self.setFixedSize(500, 500)
         self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         if self.layout():
@@ -130,12 +134,18 @@ class RecoveryView(QWidget):
         self.goback_btn.clicked.connect(self.handle_goback)
 
     def codeSendRequest(self, email):
-        controller = RecoveryController(email)
-    
-        if controller.code:
-            self.codeConfirmScreen(controller.code, email)
+        verify_user = LoginController.verifyUserLogin(email)
+
+        if verify_user is not None:
+            controller = RecoveryController(email)
+        
+            if controller.code:
+                self.codeConfirmScreen(controller.code, email)
+            else:
+                QMessageBox.warning(self, "Erro", "Falha ao enviar o código")
+
         else:
-            QMessageBox.warning(self, "Erro", "Falha ao enviar o código")
+            QMessageBox.warning(self, "Erro", "O usuário não está cadastrado")
 
     def handle_code(self, code, email):
         code_input = self.code_input.text()
@@ -160,5 +170,21 @@ class RecoveryView(QWidget):
         
         self.codeSendRequest(email)
 
+    def clearFields(self):
+        try:
+            if hasattr(self, 'email_input') and self.email_input is not None:
+                self.email_input.clear()
+                
+            if hasattr(self, 'code_input') and self.code_input is not None:
+                self.code_input.clear()
+                
+            if self.layout():
+                QWidget().setLayout(self.layout())
+                
+            self.initScreen()
+        except RuntimeError:
+            pass
+
     def handle_goback(self):
+        self.clearFields()
         self.controller.switch_to_login()

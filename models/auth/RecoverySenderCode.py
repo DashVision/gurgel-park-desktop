@@ -29,6 +29,8 @@ class CodeSenders:
             with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
                 server.login(email_bot, senha_bot)
                 server.send_message(msg)
+                
+                print(six_digits_code)
                 return six_digits_code
 
         except Exception as e:

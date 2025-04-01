@@ -63,19 +63,16 @@ class RegisterViews(QWidget):
         self.setLayout(self.mainLayout)
 
         self.setStyleSheet("""
-            /* Estilo geral */
             QWidget {
                 background: transparent;
                 color: #333;
                 font-family: 'Arial', sans-serif;
             }
             
-            /* Imagem à esquerda */
             QLabel {
                 border-right: 2px solid #ddd;
             }
 
-            /* Texto de boas-vindas */
             QLabel#welcome_text {
                 font-size: 24px;
                 font-weight: bold;
@@ -83,7 +80,6 @@ class RegisterViews(QWidget):
                 margin-bottom: 20px;
             }
 
-            /* Campos de entrada */
             QLineEdit {
                 border: 2px solid #ccc;
                 border-radius: 5px;
@@ -95,7 +91,6 @@ class RegisterViews(QWidget):
                 max-width: 400px;
             }
 
-            /* Botão principal */
             QPushButton#register_btn {
                 background-color: #4CAF50;
                 color: white;
@@ -113,7 +108,6 @@ class RegisterViews(QWidget):
                 background-color: #45a049;
             }
 
-            /* Botões de texto */
             QPushButton {
                 background: none;
                 color: #4CAF50;
@@ -147,4 +141,11 @@ class RegisterViews(QWidget):
         self.handle_goto_login()
 
     def handle_goto_login(self):
+        self.clearFields()
         self.controller.switch_to_login()
+
+    def clearFields(self):
+        self.name_input.clear()
+        self.email_input.clear()
+        self.password_input.clear()
+        self.confirm_password_input.clear()

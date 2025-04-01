@@ -60,19 +60,16 @@ class LoginViews(QWidget):
         self.setLayout(self.main_layout)
 
         self.setStyleSheet("""
-            /* Estilo geral */
             QWidget {
                 background: transparent;
                 color: #333;
                 font-family: 'Arial', sans-serif;
             }
             
-            /* Imagem à esquerda */
             QLabel {
                 border-right: 2px solid #ddd;
             }
 
-            /* Texto de boas-vindas */
             QLabel#welcome_generic_text {
                 font-size: 24px;
                 font-weight: bold;
@@ -80,7 +77,6 @@ class LoginViews(QWidget):
                 margin-bottom: 20px;
             }
 
-            /* Campos de entrada */
             QLineEdit {
                 border: 2px solid #ccc;
                 border-radius: 5px;
@@ -92,7 +88,6 @@ class LoginViews(QWidget):
                 max-width: 400px;
             }
 
-            /* Botão principal */
             QPushButton#confirm_btn {
                 background-color: #4CAF50;
                 color: white;
@@ -110,7 +105,6 @@ class LoginViews(QWidget):
                 background-color: #45a049;
             }
 
-            /* Botões de texto */
             QPushButton {
                 background: none;
                 color: #4CAF50;
@@ -133,18 +127,23 @@ class LoginViews(QWidget):
             QMessageBox.warning(self, "Erro", "Por favor, preencha todos os campos!")
             return
 
-        login_auth = LoginController.verifyIfUser(email, password)
+        login_auth = LoginController.verifyUserLogin(email, password)
         
         if login_auth:
             QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
-            # Navegar para tela principal passando o email do usuário
             self.controller.switch_to_home(email)
             return
         
         QMessageBox.warning(self, "Erro", "Email ou senha incorretos!")
 
     def handle_goto_register(self):
+        self.clearFields()
         self.controller.switch_to_register()
 
     def handle_goto_recovery(self):
+        self.clearFields()
         self.controller.switch_to_recovery()
+
+    def clearFields(self):
+        self.email_input.clear()
+        self.password_input.clear()

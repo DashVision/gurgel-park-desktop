@@ -13,7 +13,6 @@ class HomeView(QWidget):
         self.sidebar_layout = QVBoxLayout()
         self.panel_layout = QVBoxLayout()
         
-        # Get user data
         self.user_data = self.controller.get_user_by_email(user_email)
         self.user_name = self.user_data['nome'] if self.user_data else "Usuário"
         
