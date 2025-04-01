@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+from controllers.auth.LoginController import LoginController
+
 class LoginViews(QWidget):
     def __init__(self, controller):
         super().__init__()
@@ -16,10 +18,10 @@ class LoginViews(QWidget):
         self.setWindowIcon(QIcon(" "))  
 
         self.setFixedSize(1000, 500) 
-        self.setWindowIcon(QIcon('icons\carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         self.img_label = QLabel(self)
-        pixmap = QPixmap('icons\depositphotos_23701387-stock-photo-man-with-car-keys.jpg')  
+        pixmap = QPixmap('views/assets/depositphotos_23701387-stock-photo-man-with-car-keys.jpg')  
         self.img_label.setPixmap(pixmap)
         self.img_label.setAlignment(Qt.AlignLeft)
         self.img_label.setScaledContents(True)  
@@ -49,6 +51,7 @@ class LoginViews(QWidget):
         self.form_layout.addWidget(self.goto_register_btn)
 
         self.recovery_password_btn = QPushButton("Esqueceu sua senha?")
+        self.recovery_password_btn.clicked.connect(self.handle_goto_recovery)
         self.form_layout.addWidget(self.recovery_password_btn)
 
         self.main_layout.addWidget(self.img_label) 
@@ -57,19 +60,16 @@ class LoginViews(QWidget):
         self.setLayout(self.main_layout)
 
         self.setStyleSheet("""
-            /* Estilo geral */
             QWidget {
                 background: transparent;
                 color: #333;
                 font-family: 'Arial', sans-serif;
             }
             
-            /* Imagem à esquerda */
             QLabel {
                 border-right: 2px solid #ddd;
             }
 
-            /* Texto de boas-vindas */
             QLabel#welcome_generic_text {
                 font-size: 24px;
                 font-weight: bold;
@@ -77,7 +77,6 @@ class LoginViews(QWidget):
                 margin-bottom: 20px;
             }
 
-            /* Campos de entrada */
             QLineEdit {
                 border: 2px solid #ccc;
                 border-radius: 5px;
@@ -89,7 +88,6 @@ class LoginViews(QWidget):
                 max-width: 400px;
             }
 
-            /* Botão principal */
             QPushButton#confirm_btn {
                 background-color: #4CAF50;
                 color: white;
@@ -107,7 +105,6 @@ class LoginViews(QWidget):
                 background-color: #45a049;
             }
 
-            /* Botões de texto */
             QPushButton {
                 background: none;
                 color: #4CAF50;
@@ -130,7 +127,23 @@ class LoginViews(QWidget):
             QMessageBox.warning(self, "Erro", "Por favor, preencha todos os campos!")
             return
 
-        QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+        login_auth = LoginController.verifyUserLogin(email, password)
+        
+        if login_auth:
+            QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+            self.controller.switch_to_home(email)
+            return
+        
+        QMessageBox.warning(self, "Erro", "Email ou senha incorretos!")
 
     def handle_goto_register(self):
+        self.clearFields()
         self.controller.switch_to_register()
+
+    def handle_goto_recovery(self):
+        self.clearFields()
+        self.controller.switch_to_recovery()
+
+    def clearFields(self):
+        self.email_input.clear()
+        self.password_input.clear()

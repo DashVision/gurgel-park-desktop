@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from controller.ScreensController import ScreensController
+from controllers.auth.ScreensController import ScreensController
 
 def main():
     app = QApplication(sys.argv)

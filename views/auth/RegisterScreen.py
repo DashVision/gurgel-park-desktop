@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+from controllers.auth.RegisterController import RegisterController
+
 class RegisterViews(QWidget):
     def __init__(self, controller):
         super().__init__()
@@ -15,10 +17,10 @@ class RegisterViews(QWidget):
         self.setWindowTitle("Registro")
         self.setWindowIcon(QIcon(""))
         self.setFixedSize(1000, 500)
-        self.setWindowIcon(QIcon('icons\carro-sedan-na-frente.png'))
+        self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         self.img_label = QLabel(self)
-        pixmap = QPixmap('icons\depositphotos_23701387-stock-photo-man-with-car-keys.jpg')
+        pixmap = QPixmap('views/assets/depositphotos_23701387-stock-photo-man-with-car-keys.jpg')
         self.img_label.setPixmap(pixmap)
         self.img_label.setAlignment(Qt.AlignLeft)
         self.img_label.setScaledContents(True)
@@ -61,19 +63,16 @@ class RegisterViews(QWidget):
         self.setLayout(self.mainLayout)
 
         self.setStyleSheet("""
-            /* Estilo geral */
             QWidget {
                 background: transparent;
                 color: #333;
                 font-family: 'Arial', sans-serif;
             }
             
-            /* Imagem à esquerda */
             QLabel {
                 border-right: 2px solid #ddd;
             }
 
-            /* Texto de boas-vindas */
             QLabel#welcome_text {
                 font-size: 24px;
                 font-weight: bold;
@@ -81,7 +80,6 @@ class RegisterViews(QWidget):
                 margin-bottom: 20px;
             }
 
-            /* Campos de entrada */
             QLineEdit {
                 border: 2px solid #ccc;
                 border-radius: 5px;
@@ -93,7 +91,6 @@ class RegisterViews(QWidget):
                 max-width: 400px;
             }
 
-            /* Botão principal */
             QPushButton#register_btn {
                 background-color: #4CAF50;
                 color: white;
@@ -111,7 +108,6 @@ class RegisterViews(QWidget):
                 background-color: #45a049;
             }
 
-            /* Botões de texto */
             QPushButton {
                 background: none;
                 color: #4CAF50;
@@ -140,8 +136,16 @@ class RegisterViews(QWidget):
             QMessageBox.warning(self, "Erro", "As senhas não coincidem!")
             return
 
+        RegisterController.createUser(name, email, password)
         QMessageBox.information(self, "Sucesso", "Registro realizado com sucesso!")
         self.handle_goto_login()
 
     def handle_goto_login(self):
+        self.clearFields()
         self.controller.switch_to_login()
+
+    def clearFields(self):
+        self.name_input.clear()
+        self.email_input.clear()
+        self.password_input.clear()
+        self.confirm_password_input.clear()
