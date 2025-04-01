@@ -3,11 +3,15 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 class HomeView(QWidget):
+    # Definindo o sinal de logout
+    logout_signal = pyqtSignal()
+
     def __init__(self, controller, user_email):
         super().__init__()
         self.controller = controller
         self.user_email = user_email
         self.is_sidebar_visible = False
+
         self.main_layout = QVBoxLayout()
         self.content_layout = QHBoxLayout()
         self.sidebar_layout = QVBoxLayout()
@@ -26,7 +30,7 @@ class HomeView(QWidget):
         self.header_layout = QHBoxLayout()
         
         self.menu_button = QPushButton()
-        self.menu_button.setIcon(QIcon("views/assets/menu-icon.png"))
+        self.menu_button.setIcon(QIcon("views/assets/icons/menu-icon.png"))
         self.menu_button.setIconSize(QSize(24, 24))
         self.menu_button.setFixedSize(40, 40)
         self.menu_button.setObjectName("menu_button")
@@ -37,13 +41,6 @@ class HomeView(QWidget):
         self.welcome_text.setAlignment(Qt.AlignCenter)
         self.welcome_text.setObjectName("welcome_text")
         self.header_layout.addWidget(self.welcome_text, 1)
-        
-        self.profile_button = QPushButton()
-        self.profile_button.setIcon(QIcon("views/assets/profile-icon.png"))
-        self.profile_button.setIconSize(QSize(24, 24))
-        self.profile_button.setFixedSize(40, 40)
-        self.profile_button.setObjectName("profile_button")
-        self.header_layout.addWidget(self.profile_button)
         
         self.main_layout.addLayout(self.header_layout)
         
@@ -83,7 +80,7 @@ class HomeView(QWidget):
         # Fazer esses botões aqui do menu funcionar 
         menu_items = [
             {"text": "Meus Veículos", "icon": "car-icon.png"},
-            {"text": "Reservas", "icon": "calendar-icon.png"},
+            {"text": "Status das vagas", "icon": "calendar-icon.png"},
             {"text": "Histórico", "icon": "history-icon.png"},
             {"text": "Configurações", "icon": "settings-icon.png"},
             {"text": "Sair", "icon": "logout-icon.png"}
@@ -92,15 +89,32 @@ class HomeView(QWidget):
         for item in menu_items:
             menu_button = QPushButton(item["text"])
             try:
-                menu_button.setIcon(QIcon(f"views/assets/{item['icon']}"))
+                menu_button.setIcon(QIcon(f"views/assets/icons/{item['icon']}"))
             except:
                 pass
 
             menu_button.setIconSize(QSize(20, 20))
             menu_button.setObjectName("sidebar_button")
+            
+            if item["text"] == "Sair":
+                menu_button.clicked.connect(self.logout)
+                
             self.sidebar_layout.addWidget(menu_button)
         
         self.sidebar_layout.addStretch()
+    
+    def logout(self):
+        reply = QMessageBox.question(
+            self, 
+            'Confirmação',
+            'Deseja realmente sair?',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            # Emite o sinal de logout em vez de fechar a aplicação
+            self.logout_signal.emit()
     
     def setup_main_panel(self):
         panel_title = QLabel("Dashboard")
@@ -108,8 +122,6 @@ class HomeView(QWidget):
         self.panel_layout.addWidget(panel_title)
         
         cards_grid = QGridLayout()
-        
-        # talvez criar mais card e dps fazer pegar do banco esses valores
         info_cards = [
             {"title": "Total de Veículos", "value": "0", "icon": "car-icon.png"},
             {"title": "Reservas Ativas", "value": "0", "icon": "calendar-icon.png"},
@@ -207,7 +219,7 @@ class HomeView(QWidget):
             
             /* Sidebar */
             #sidebar {
-                background-color: #333;
+                background-color: #5A6268;
                 color: white;
                 border-radius: 5px;
                 padding: 10px;
@@ -219,7 +231,7 @@ class HomeView(QWidget):
                 font-weight: bold;
                 padding: 10px 0;
                 margin-bottom: 10px;
-                border-bottom: 1px solid #444;
+                border-bottom: 1px solid #8a9199;
             }
             
             #sidebar_button {
@@ -233,6 +245,7 @@ class HomeView(QWidget):
             
             #sidebar_button:hover {
                 background-color: #4CAF50;
+                color: white;
             }
             
             /* Panel */

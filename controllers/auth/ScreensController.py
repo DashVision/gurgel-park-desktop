@@ -69,6 +69,9 @@ class ScreensController:
         home_controller = HomeController()
         self.home_screen = HomeView(home_controller, user_email)
         
+        # Conectar o sinal de logout com o método switch_to_login
+        self.home_screen.logout_signal.connect(self.switch_to_login)
+        
         self.stacked_widget.removeWidget(self.stacked_widget.widget(4))
         self.stacked_widget.insertWidget(4, self.home_screen)
         self.stacked_widget.setCurrentWidget(self.home_screen)
