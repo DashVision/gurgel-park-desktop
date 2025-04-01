@@ -304,4 +304,4 @@ class HomeView(QWidget):
             #activity_list::item:last-child {
                 border-bottom: none;
             }
-        """)        
+        """) 
