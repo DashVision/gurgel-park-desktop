@@ -6,6 +6,5 @@ class GurgelParkApp(App):
         self.controller = ScreensController()
         return self.controller.get_root_widget()
 
-
 if __name__ == '__main__':
     GurgelParkApp().run()

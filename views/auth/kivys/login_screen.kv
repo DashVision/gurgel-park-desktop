@@ -1,0 +1,30 @@
+<LoginScreen>:
+    GridLayout:
+        cols: 1
+        padding: 10
+        spacing: 10
+
+        Label:
+            text: "Email"
+        TextInput:
+            id: email_input
+            multiline: False
+
+        Label:
+            text: "Senha"
+        TextInput:
+            id: password_input
+            multiline: False
+            password: True
+
+        Button:
+            text: "Entrar"
+            on_press: app.controller.login_user(email_input.text, password_input.text)
+
+        Button:
+            text: "Registrar"
+            on_press: app.controller.show_register_screen()
+
+        Button:
+            text: "Esqueceu a senha?"
+            on_press: app.controller.show_forgot_password_screen()

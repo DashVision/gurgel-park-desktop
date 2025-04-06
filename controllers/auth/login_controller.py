@@ -5,5 +5,5 @@ class LoginController:
         pass
 
     @staticmethod
-    def handle_user_login(email, password=None) -> Any:
+    def handle_user_login(email, password=None) -> any:
         return User.read_user(email, password)

@@ -5,5 +5,5 @@ class RegisterController:
         pass
 
     @staticmethod
-    def create_user(name, email, password) -> Any:
+    def create_user(name, email, password) -> any:
         return User().create_user(name, email, password)
