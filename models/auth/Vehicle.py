@@ -1,4 +1,3 @@
-from typing import Any
 import mysql.connector
 from config import DB_CONFIG
 
@@ -42,10 +41,10 @@ class Vehicle:
             return True
 
         except mysql.connector.Error as err:
-            print(f"Erro ao cadastrar veículo: {err}")
+            print(f"Erro ao cadastrar veï¿½culo: {err}")
             return False
 
-    def get_vehicle_by_placa(self, placa) -> Any:
+    def get_vehicle_by_placa(self, placa) -> any:
         if self.cursor == None:
             raise Exception("Erro no cursor")
 

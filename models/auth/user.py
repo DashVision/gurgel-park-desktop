@@ -23,7 +23,7 @@ class User:
 
     def create_user(self, name, email, password):
         if self.cursor is None: 
-            raise Exception("Não é possível criar um usuário no momento")
+            raise Exception("NÃ£o Ã© possÃ­vel criar um usuÃ¡rio no momento")
         
         sql_insert = f"INSERT INTO users (nome, email, senha) VALUES (%s, %s, %s)"
         values = (name, email, password)
@@ -32,7 +32,7 @@ class User:
         self.connection.commit()
         return self.cursor.lastrowid
 
-    def read_user(self, email, password=None) -> Any:
+    def read_user(self, email, password=None) -> any:
         if password is not None:
             query = "SELECT * FROM users WHERE email = %s AND senha = %s"
             query_values = (email, password)

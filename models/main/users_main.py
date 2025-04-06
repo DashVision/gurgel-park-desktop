@@ -1,4 +1,3 @@
-from typing import Any
 import mysql.connector
 from config import DB_CONFIG
 
@@ -7,7 +6,7 @@ class UsersMain:
         self.connection = mysql.connector.connect(**DB_CONFIG)
         self.cursor = self.connection.cursor(dictionary=True)
     
-    def get_user_data(self, email) -> Any:
+    def get_user_data(self, email) -> any:
         if self.cursor is None:
             raise Exception("Erro no cursor")
 

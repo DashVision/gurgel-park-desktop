@@ -20,10 +20,10 @@ class Recovery:
             msg = EmailMessage()
             msg["From"] = email_bot
             msg["To"] = receiver
-            msg["Subject"] = "Recuperação de senha"
-
+            msg["Subject"] = "RecuperaÃ§Ã£o de senha"
+            
             msg.set_content(
-                f"Seu código de recuperação do sistema Gurgel Park: {formated_code}",
+                f"Seu cÃ³digo de recuperaÃ§Ã£o: {formated_code}",
                 charset="utf-8"
             )
 
@@ -31,7 +31,7 @@ class Recovery:
                 server.login(email_bot, senha_bot)
                 server.send_message(msg)
 
-                print(f"Código de recuperação enviado: {formated_code}")
+                print(f"Cï¿½digo de recuperaÃ§Ã£o enviado: {formated_code}")
                 return formated_code
 
         except Exception as e:

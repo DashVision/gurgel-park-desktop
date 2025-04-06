@@ -1,4 +1,3 @@
-from typing import Any
 import mysql.connector
 from mysql.connector import Error
 from config import DB_CONFIG
@@ -13,7 +12,7 @@ class VehiclesMain:
             check_sql = "SELECT id FROM vehicles WHERE placa = %s"
             self.cursor.execute(check_sql, (license_plate,))
             if self.cursor.fetchone():
-                raise Exception("Placa já cadastrada no sistema")
+                raise Exception("Placa jï¿½ cadastrada no sistema")
 
             sql_insert = "INSERT INTO vehicles (placa, marca, modelo, ano, cor, user_id) VALUES (%s, %s, %s, %s, %s, %s)"
             sql_values = (license_plate, brand, model, year, color, user_id)
@@ -24,9 +23,9 @@ class VehiclesMain:
             return self.cursor.lastrowid
 
         except Error as e:
-            print(f"Erro ao registrar veículo: {e}")
+            print(f"Erro ao registrar veï¿½culo: {e}")
             self.connection.rollback()
-            raise Exception(f"Erro ao registrar veículo: {str(e)}")
+            raise Exception(f"Erro ao registrar veï¿½culo: {str(e)}")
 
     def get_user_vehicles(self, user_id: int) -> list:
         try:
@@ -34,7 +33,7 @@ class VehiclesMain:
             self.cursor.execute(sql_query, (user_id,))
             return self.cursor.fetchall()
         except Error as e:
-            print(f"Erro ao buscar veículos do usuário: {e}")
+            print(f"Erro ao buscar veï¿½culos do usuï¿½rio: {e}")
             return []
 
     def get_vehicle_by_id(self, vehicle_id: int, user_id: int) -> dict:
@@ -43,7 +42,7 @@ class VehiclesMain:
             self.cursor.execute(sql_query, (vehicle_id, user_id))
             return self.cursor.fetchone()
         except Error as e:
-            print(f"Erro ao buscar veículo: {e}")
+            print(f"Erro ao buscar veï¿½culo: {e}")
             return None
 
     def delete_vehicle(self, vehicle_id: int, user_id: int) -> bool:
@@ -53,7 +52,7 @@ class VehiclesMain:
             self.connection.commit()
             return self.cursor.rowcount > 0
         except Error as e:
-            print(f"Erro ao deletar veículo: {e}")
+            print(f"Erro ao deletar veï¿½culo: {e}")
             self.connection.rollback()
             return False
             
@@ -69,9 +68,9 @@ class VehiclesMain:
                 )
                 self.cursor = self.connection.cursor(dictionary=True)
             
-            # Verificar se a conexão é válida
+            # Verificar se a conexï¿½o ï¿½ vï¿½lida
             if not self.connection.is_connected():
-                print("Falha na reconexão. Tentando novamente.")
+                print("Falha na reconexï¿½o. Tentando novamente.")
                 self.connection = mysql.connector.connect(
                     host="localhost",
                     user="root",
@@ -106,7 +105,7 @@ class VehiclesMain:
             # Verificar resultados
             print(f"Consulta executada. Resultados: {len(results)}")
             for vehicle in results:
-                print(f"Veículo encontrado: {vehicle['marca']} {vehicle['modelo']} ({vehicle['placa']})")
+                print(f"Veï¿½culo encontrado: {vehicle['marca']} {vehicle['modelo']} ({vehicle['placa']})")
                 
             return results
             
@@ -115,7 +114,7 @@ class VehiclesMain:
             return []
 
         except Exception as e:
-            print(f"Exceção ao buscar atividades: {e}")
+            print(f"Exceï¿½ï¿½o ao buscar atividades: {e}")
             import traceback
             traceback.print_exc()
             return []
