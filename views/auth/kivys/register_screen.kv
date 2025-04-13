@@ -1,0 +1,38 @@
+<RegisterScreen>:
+	GridLayout:
+		cols: 1
+		padding: 10
+		spacing: 10	
+
+		Label:
+			text: "Nome e Sobrenome"
+	    TextInput:
+		    id: name_input
+			multiline: False
+
+		Label: 
+		    text: "Email"
+	    TextInput:
+			id: email_input	
+			multiline: False
+		Label:
+			text: "Senha"
+			TextInput:
+			id: password_input
+				multiline: False
+				password: True
+
+		Label:
+			text: "Confirme a Senha"
+			TextInput:
+				id: confirm_password_input
+				multiline: False
+				password: True
+
+		Button:
+			text: "Registrar"
+			on_press: app.controller.register_user(name_input.text, email_input.text, password_input.text, confirm_password_input.text)
+
+		Button:
+			text: "Já tem login? Faça login"
+			on_press: app.controller.show_login_screen()

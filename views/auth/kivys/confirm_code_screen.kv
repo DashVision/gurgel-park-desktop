@@ -1,0 +1,29 @@
+<ConfirmCodeScreen>:
+	GridLayout:
+		cols: 1
+		padding: 10
+		spacing: 10
+
+		Label:
+			text: "Digite o código enviado para seu email"
+			size_hint_y: None
+			height: self.texture_size[1]
+
+			TextInput:
+			id: code_input
+				multiline: False
+				hint_text: "Código"
+				size_hint_y: None
+				height: 40
+
+		Button:
+		text: "Confirmar Código"
+			on_press: app.controller.confirm_code(code_input.text)
+			size_hint_y: None
+			height: 40
+
+		Button:
+		text: "Voltar para Login"
+			on_press: app.controller.show_login_screen()
+			size_hint_y: None
+			height: 40
