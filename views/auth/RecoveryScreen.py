@@ -11,7 +11,7 @@ class RecoveryView(QWidget):
         
         self.controller = controller
         self.main_layout = QVBoxLayout()
-        self.second_layout = QVBoxLayout()
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
         
         self.initScreen()
 
@@ -57,36 +57,21 @@ class RecoveryView(QWidget):
                 background-color: #da190b;
             }
         """)
-
-        container = QWidget()
-        container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignCenter)
-
-        logo_label = QLabel()
-        logo_pixmap = QPixmap('views/assets/carro-sedan-na-frente.png')
-        if not logo_pixmap.isNull():
-            logo_label.setPixmap(logo_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        
-        logo_label.setAlignment(Qt.AlignCenter)
-        container_layout.addWidget(logo_label)
-
         self.recovery_generic_text = QLabel("Vamos te ajudar a recuperar sua senha!")
         self.recovery_generic_text.setAlignment(Qt.AlignCenter)
-        container_layout.addWidget(self.recovery_generic_text)
+        self.main_layout.addWidget(self.recovery_generic_text)
 
         self.email_input = QLineEdit()
         self.email_input.setPlaceholderText("Insira seu email")
-        container_layout.addWidget(self.email_input)
+        self.main_layout.addWidget(self.email_input)
 
         self.confirm_btn = QPushButton("Enviar código de recuperação")
-        container_layout.addWidget(self.confirm_btn)
+        self.main_layout.addWidget(self.confirm_btn)
 
         self.goback_btn = QPushButton("Retornar para a tela de login")
         self.goback_btn.setObjectName("goback")
-        container_layout.addWidget(self.goback_btn)
+        self.main_layout.addWidget(self.goback_btn)
 
-        container.setLayout(container_layout)
-        self.main_layout.addWidget(container)
         self.setLayout(self.main_layout)
 
         self.confirm_btn.clicked.connect(self.handle_recovery)
@@ -100,35 +85,29 @@ class RecoveryView(QWidget):
         if self.layout():
             QWidget().setLayout(self.layout())
 
-        container = QWidget()
-        container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignCenter)
-
         logo_label = QLabel()
         logo_pixmap = QPixmap('views/assets/carro-sedan-na-frente.png')
         if not logo_pixmap.isNull():
             logo_label.setPixmap(logo_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         logo_label.setAlignment(Qt.AlignCenter)
-        container_layout.addWidget(logo_label)
+        self.main_layout.addWidget(logo_label)
 
         self.confirm_generic_text = QLabel("Confirme o código recebido")
         self.confirm_generic_text.setAlignment(Qt.AlignCenter)
-        container_layout.addWidget(self.confirm_generic_text)
+        self.main_layout.addWidget(self.confirm_generic_text)
 
         self.code_input = QLineEdit()
         self.code_input.setPlaceholderText("Insira o código recebido")
-        container_layout.addWidget(self.code_input)
+        self.main_layout.addWidget(self.code_input)
 
         self.confirm_btn = QPushButton("Confirmar código")
-        container_layout.addWidget(self.confirm_btn)
+        self.main_layout.addWidget(self.confirm_btn)
 
         self.goback_btn = QPushButton("Voltar")
         self.goback_btn.setObjectName("goback")
-        container_layout.addWidget(self.goback_btn)
+        self.main_layout.addWidget(self.goback_btn)
         
-        container.setLayout(container_layout)
-        self.second_layout.addWidget(container)
-        self.setLayout(self.second_layout)
+        self.setLayout(self.main_layout)
 
         self.confirm_btn.clicked.connect(lambda: self.handle_code(code, email))
         self.goback_btn.clicked.connect(self.handle_goback)

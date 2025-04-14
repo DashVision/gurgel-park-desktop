@@ -17,7 +17,7 @@ class SwitchPasswordView(QWidget):
         self.setWindowTitle("Insira sua nova senha")
         self.setWindowIcon(QIcon(""))
         
-        self.setFixedSize(500, 500)
+        self.setFixedHeight(300)
         self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
         self.setStyleSheet("""
             QWidget {

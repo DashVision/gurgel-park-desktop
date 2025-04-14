@@ -20,7 +20,7 @@ class RegisterViews(QWidget):
         self.setWindowIcon(QIcon('views/assets/carro-sedan-na-frente.png'))
 
         self.img_label = QLabel(self)
-        pixmap = QPixmap('views/assets/depositphotos_23701387-stock-photo-man-with-car-keys.jpg')
+        pixmap = QPixmap('') # views/assets/depositphotos_23701387-stock-photo-man-with-car-keys.jpg
         self.img_label.setPixmap(pixmap)
         self.img_label.setAlignment(Qt.AlignLeft)
         self.img_label.setScaledContents(True)
