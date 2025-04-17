@@ -1,9 +1,13 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
-from controllers.auth.auth_controller import AuthController
 from PyQt5.QtCore import Qt
+from controllers.auth.auth_controller import AuthController
+from models.auth.email import Email  # Importando a classe Email
+
 
 class RegisterWindow(QWidget):
-    def __init__(self, screens_controller):
+    def __init__(self, screens_controller, auth_controller=None):
+        super().__init__()
+        self.auth_controller = AuthController()
         print("Iniciando construtor do RegisterWindow...")  # Log para depuração
         super().__init__()
         print("Chamando super().__init__() no RegisterWindow...")  # Log para depuração
@@ -16,18 +20,35 @@ class RegisterWindow(QWidget):
         layout = QVBoxLayout()
 
         title = QLabel("Registrar nova conta")
-        return_to_login_btn = QPushButton("Voltar para Login")
-        return_to_login_btn.clicked.connect(self.handle_return_to_login)
+        title.setAlignment(Qt.AlignCenter)
+        
+        self.register_new_user_btn = QPushButton("Registrar nova conta")
+        self.register_new_user_btn.clicked.connect(self.handle_register_new_user)
+
+        self.return_to_login_btn = QPushButton("Voltar para Login")
+        self.return_to_login_btn.clicked.connect(self.handle_return_to_login)
 
         layout.addWidget(title)
-        layout.addWidget(return_to_login_btn)
+        layout.addWidget(self.return_to_login_btn)
 
         self.setLayout(layout)
 
-    def handle_return_to_login(self):
+    def handle_register_new_user(self, name: str, email: str, password: str) -> None:
+        try:
+            validated_email = Email(email)
+            if self.auth_controller.handle_register(name, str(validated_email), password):
+                QMessageBox.information(self, "Sucesso", "Usuário registrado com sucesso!")
+                self.screens_controller.set_screen("login")
+
+            else:
+                QMessageBox.critical(self, "Erro", "Erro ao registrar o usuário.")
+                
+        except ValueError as e:
+            QMessageBox.warning(self, "Erro", str(e))
+
+    def handle_return_to_login(self) -> None:
         self.screens_controller.set_screen("login")
 
-# Teste isolado do RegisterWindow
 if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
     import sys
