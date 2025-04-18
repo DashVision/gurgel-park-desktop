@@ -8,7 +8,6 @@ from controllers.screens_controller import ScreensController
 class HomeWindow(QWidget):
     def __init__(self, screens_controller: ScreensController, auth_controller: AuthController, vehicles_controller):
         super().__init__()
-        print("Inicializando HomeWindow...")  # Log para depuração
         self.screens_controller = screens_controller
         self.auth_controller = auth_controller
         self.vehicles_controller = vehicles_controller
@@ -112,7 +111,6 @@ class HomeWindow(QWidget):
         animation.start()
 
     def show_vehicle_screen(self):
-        print("Exibindo tela de veículos...")  # Log para depuração
         self.screens_controller.set_screen("car_register")
 
     def show_status_screen(self):

@@ -12,8 +12,6 @@ from views.home.home_window import HomeWindow
 from views.home.car_register_window import CarRegisterWindow
 
 def initialize_application():
-    print("Inicializando o aplicativo...")  # Log para depuração
-
     try:
         # Instancia o controlador de telas
         print("Instanciando o ScreensController...")
@@ -48,7 +46,6 @@ def initialize_application():
 
         screens_controller.auth_controller = auth_controller
 
-        print("Aplicativo inicializado com sucesso!")
         return screens_controller
 
     except Exception as e:
