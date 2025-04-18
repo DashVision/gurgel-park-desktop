@@ -16,6 +16,12 @@ class ScreensController(QStackedWidget):
         if name in self.screens:
             index = self.screens[name]
             print(f"Alternando para a tela: {name} (índice {index})")
+            
+            # Limpa os campos da tela antes de exibi-la
+            widget = self.widget(index)
+            if hasattr(widget, "clear_fields"):
+                widget.clear_fields()
+            
             self.setCurrentIndex(index)
         else:
             print(f"Tela '{name}' não encontrada.")

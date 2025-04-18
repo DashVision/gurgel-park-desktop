@@ -74,3 +74,7 @@ class NewPasswordWindow(QWidget):
 
     def handle_return_to_login(self):
         self.screens_controller.set_screen("login")
+
+    def clear_fields(self):
+        self.new_password_input.clear()
+        self.confirm_password_input.clear()

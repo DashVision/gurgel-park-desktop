@@ -76,6 +76,11 @@ class RegisterWindow(QWidget):
         print("Tentando voltar para a tela de login...")  # Log para depuração
         self.screens_controller.set_screen("login")
 
+    def clear_fields(self):
+        self.name_input.clear()
+        self.email_input.clear()
+        self.password_input.clear()
+
 
 if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication

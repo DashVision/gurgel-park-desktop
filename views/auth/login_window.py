@@ -74,3 +74,7 @@ class LoginWindow(QWidget):
     def handle_register(self):
         print("Navegando para a tela de 'Registrar'...")  # Log para depuração
         self.screens_controller.set_screen("register")
+
+    def clear_fields(self):
+        self.email_input.clear()
+        self.password_input.clear()

@@ -60,3 +60,6 @@ class ConfirmCodeWindow(QWidget):
 
     def handle_return_to_login(self):
         self.screens_controller.set_screen("login")
+
+    def clear_fields(self):
+        self.code_input.clear()
