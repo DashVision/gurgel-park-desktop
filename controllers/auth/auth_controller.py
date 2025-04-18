@@ -1,5 +1,6 @@
 from repositories.auth.user_repository import UserRepository
 from models.auth.user import User
+import bcrypt
 
 class AuthController:
     def __init__(self) -> None:
@@ -27,7 +28,9 @@ class AuthController:
         
     def handle_register(self, name: str, email: str, password: str) -> bool:
         try:
-            user = User(name=name, email=email, password=password)
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Salt é gerado como bytes
+
+            user = User(name=name, email=email, hashed_password=hashed_password.decode('utf-8'))  # Decodifica o hash para armazenar como string
             self.repository.create_user(user)
 
             return True

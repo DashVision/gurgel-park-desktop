@@ -8,10 +8,7 @@ class RegisterWindow(QWidget):
     def __init__(self, screens_controller, auth_controller=None):
         super().__init__()
         self.auth_controller = AuthController()
-        print("Iniciando construtor do RegisterWindow...")  # Log para depuração
-        super().__init__()
-        print("Chamando super().__init__() no RegisterWindow...")  # Log para depuração
-        self.screens_controller = screens_controller
+        print("Iniciando construtor do RegisterWindow...")  # Log para depuração        self.screens_controller = screens_controller
         print("Inicializando UI do RegisterWindow...")  # Log para depuração
         self.init_ui()
         print("RegisterWindow inicializado com sucesso!")  # Log para depuração
@@ -21,33 +18,62 @@ class RegisterWindow(QWidget):
 
         title = QLabel("Registrar nova conta")
         title.setAlignment(Qt.AlignCenter)
-        
+
+        # Campos de entrada para nome, email e senha
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Nome")
+
+        self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText("Email")
+
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("Senha")
+        self.password_input.setEchoMode(QLineEdit.Password)
+
+        # Botão para registrar nova conta
         self.register_new_user_btn = QPushButton("Registrar nova conta")
         self.register_new_user_btn.clicked.connect(self.handle_register_new_user)
 
+        # Botão para voltar ao login
         self.return_to_login_btn = QPushButton("Voltar para Login")
         self.return_to_login_btn.clicked.connect(self.handle_return_to_login)
 
+        # Adicionando widgets ao layout
         layout.addWidget(title)
+        layout.addWidget(self.name_input)
+        layout.addWidget(self.email_input)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.register_new_user_btn)
         layout.addWidget(self.return_to_login_btn)
 
         self.setLayout(layout)
 
-    def handle_register_new_user(self, name: str, email: str, password: str) -> None:
+    def handle_register_new_user(self) -> None:
+        # Captura os valores dos campos de entrada
+        name = self.name_input.text().strip()
+        email = self.email_input.text().strip()
+        password = self.password_input.text().strip()
+
+        # Valida os campos
+        if not name or not email or not password:
+            QMessageBox.warning(self, "Erro", "Todos os campos devem ser preenchidos.")
+            return
+
         try:
+            # Valida o email e tenta registrar o usuário
             validated_email = Email(email)
             if self.auth_controller.handle_register(name, str(validated_email), password):
                 QMessageBox.information(self, "Sucesso", "Usuário registrado com sucesso!")
                 self.screens_controller.set_screen("login")
-
             else:
                 QMessageBox.critical(self, "Erro", "Erro ao registrar o usuário.")
-                
         except ValueError as e:
             QMessageBox.warning(self, "Erro", str(e))
 
     def handle_return_to_login(self) -> None:
+        # Retorna para a tela de login
         self.screens_controller.set_screen("login")
+
 
 if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
