@@ -16,15 +16,34 @@ class AuthController:
             print(f"Erro ao inicializar AuthController: {e}")
             raise
 
+    def is_logged_in(self) -> bool:
+        return self.current_email is not None
+    
+    def logout(self) -> None:
+        self.current_email = None
+        print("Usuário deslogado.")
+
     def handle_login(self, email: str, password: str) -> bool:
         try:
+            print(f"Tentando login com email: {email}")
             user = self.repository.get_user_by_credentials(email)
 
-            if user and bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
-                self.show_main_app(user.id)
-                return True
+            if user:
+                print(f"Usuário encontrado: {user}")  # Log para depuração
+                print(f"Senha fornecida: {password}")
+                print(f"Hash armazenado: {user.hashed_password}")
 
-            print("Credenciais inválidas.")  # Log para depuração
+                if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+                    self.current_email = user.email  # Define o email do usuário logado
+                    print("Login bem-sucedido!")  # Log para depuração
+                    return True
+                
+                else:
+                    print("Senha incorreta.")  # Log para depuração
+                    
+            else:
+                print("Usuário não encontrado.")  # Log para depuração
+
             return False
 
         except Exception as e:
@@ -92,6 +111,3 @@ class AuthController:
         except Exception as e:
             print(f"Erro no update_password: {e}")
             return False
-
-    def show_main_app(self, user_id):
-        pass

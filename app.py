@@ -7,6 +7,7 @@ from views.auth.forgot_password_window import ForgotPasswordWindow
 from views.auth.register_window import RegisterWindow
 from views.auth.new_password_window import NewPasswordWindow
 from views.auth.confirm_code_window import ConfirmCodeWindow
+from views.home.home_window import HomeWindow
 
 def main():
     print("Inicializando o aplicativo...")  # Log para depuração
@@ -27,16 +28,18 @@ def main():
     new_password_window = NewPasswordWindow(screens_controller, auth_controller)
     confirm_code_window = ConfirmCodeWindow(screens_controller, auth_controller)
 
+    # Telas pós login
+    home_window = HomeWindow(screens_controller, auth_controller)
+
     screens_controller.add_screen("login", login_window)
-    print("Tela de login adicionada ao ScreensController.")  # Log para depuração
     screens_controller.add_screen("forgot_password", forgot_password_window)
-    print("Tela de recuperação de senha adicionada ao ScreensController.")  # Log para depuração
     screens_controller.add_screen("register", register_window)
     screens_controller.add_screen("new_password", new_password_window)
     screens_controller.add_screen("confirm_code", confirm_code_window)
+    screens_controller.add_screen("home", home_window)
 
-    # Define a tela inicial como a tela de login
-    print("Definindo a tela inicial como 'login'...")  # Log para depuração
+    screens_controller.auth_controller = auth_controller
+
     screens_controller.set_screen("login")
 
     # Exibe o controlador de telas
