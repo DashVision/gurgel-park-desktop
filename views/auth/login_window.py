@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
 from PyQt5.QtCore import Qt
 
+from controllers.auth.auth_controller import AuthController
+
 class LoginWindow(QWidget):
     def __init__(self, screens_controller):
         super().__init__()
         print("Inicializando LoginWindow...")  # Log para depuração
         self.screens_controller = screens_controller
+        self.auth_controller = AuthController()
         self.init_ui()
 
     def init_ui(self):
@@ -46,9 +49,23 @@ class LoginWindow(QWidget):
         
         self.setLayout(layout)
 
-    def handle_login(self):
-        print("Tentando fazer login...")  # Log para depuração
-        QMessageBox.information(self, "Login", "Login realizado com sucesso!")
+    def handle_login(self) -> None:
+        print("Tentando fazer login...")
+
+        email = self.email_input.text().strip()
+        password = self.password_input.text().strip()
+
+        if email == "" or password == "":
+            QMessageBox.warning(self, "Erro!", "Preencha os campos pelo menos")
+            return
+
+        if self.auth_controller.handle_login(email, password):
+            QMessageBox.information(self, "Login", "Login realizado com sucesso!")
+            self.screens_controller.set_screen("main_app")
+
+        else:
+            QMessageBox.warning(self, "Erro", "Credenciais inválidas!")
+            print("Credenciais inválidas!")
 
     def handle_forgot_password(self):
         print("Navegando para a tela de 'Esqueci minha senha'...")  # Log para depuração

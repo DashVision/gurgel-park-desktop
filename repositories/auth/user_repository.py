@@ -29,7 +29,7 @@ class UserRepository:
         print("Usuário criado com sucesso!")  # Log para depuração
 
     def get_user_by_credentials(self, email: str, password: str) -> Optional[User]:
-        print(f"Buscando usuário com email: {email}")  # Log para depuração
+        print(f"Buscando usuário com email: {email} e senha: {password}")  # Log para depuração
         cursor = self.conn.cursor()
         query = "SELECT id, name, email, password FROM users WHERE email = %s AND password = %s"
         cursor.execute(query, (email, password))
