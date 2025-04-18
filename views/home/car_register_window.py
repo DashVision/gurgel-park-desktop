@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit, QSpinBox, QPushButton, QLabel, QMessageBox, QListWidget
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QShowEvent
 from controllers.auth.auth_controller import AuthController
 from controllers.screens_controller import ScreensController
 
@@ -87,12 +88,14 @@ class CarRegisterWindow(QWidget):
         self.screens_controller.set_screen("home")
 
     def load_user_vehicles(self):
+        # Verifica se o usuário está logado
         if not self.auth_controller.is_logged_in():
             self.vehicles_list.clear()
             self.vehicles_list.addItem("Por favor, faça login para visualizar seus veículos.")
             print("Usuário não está logado.")  # Log para depuração
             return
 
+        # Obtém o ID do usuário logado
         self.user_id = self.auth_controller.get_current_user_id()
         if not self.user_id:
             self.vehicles_list.clear()
@@ -101,19 +104,25 @@ class CarRegisterWindow(QWidget):
             return
 
         try:
+            # Busca os veículos do usuário
             vehicles = self.vehicles_controller.get_user_vehicles(self.user_id)
             self.vehicles_list.clear()
 
+            # Verifica se o usuário não possui veículos
             if not vehicles:
                 self.vehicles_list.addItem("Nenhum veículo cadastrado.")
+                print("Nenhum veículo encontrado para o usuário.")  # Log para depuração
                 return
 
+            # Exibe os veículos na lista
             for vehicle in vehicles:
                 item_text = f"{vehicle.plate} - {vehicle.brand} {vehicle.model} ({vehicle.year})"
                 self.vehicles_list.addItem(item_text)
+            print(f"Veículos carregados: {len(vehicles)}")  # Log para depuração
 
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao carregar veículos: {str(e)}")
+            print(f"Erro ao carregar veículos: {e}")  # Log para depuração
 
     def register_vehicle(self):
         self.user_id = self.auth_controller.get_current_user_id()
@@ -163,4 +172,10 @@ class CarRegisterWindow(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao cadastrar veículo: {str(e)}")
+
+    def showEvent(self, event: QShowEvent):
+        """Carrega os veículos do usuário sempre que a tela for exibida."""
+        super().showEvent(event)
+        print("Tela de cadastro de veículos exibida. Atualizando lista de veículos...")  # Log para depuração
+        self.load_user_vehicles()
 
