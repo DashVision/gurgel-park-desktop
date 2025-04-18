@@ -20,15 +20,20 @@ class VehiclesRepository:
             print("Fechando conexão com o banco de dados...")
             self.conn.close()
 
-    def create_vehicle(self, vehicle: Vehicle) -> None:
+    def create_vehicle(self, vehicle: Vehicle) -> int:
         print(f"Criando veículo: {vehicle}")
         cursor = self.conn.cursor()
 
-        query = "INSERT INTO vehicles (plate, brand, model, year, color) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(query, (vehicle.plate, vehicle.brand, vehicle.model, vehicle.year, vehicle.color))
+        query = """
+            INSERT INTO vehicles (placa, marca, modelo, ano, cor, user_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (vehicle.plate, vehicle.brand, vehicle.model, vehicle.year, vehicle.color, vehicle.user_id))
         self.conn.commit()
+        vehicle_id = cursor.lastrowid
         cursor.close()
         print("Veículo criado com sucesso!")
+        return vehicle_id
 
     def get_vehicle_by_credentials(self, plate: str) -> Optional[Vehicle]:
         print(f"Buscando veículo com placa: {plate}")
@@ -77,6 +82,29 @@ class VehiclesRepository:
 
         print("Nenhum veículo encontrado.")
         return None
+    
+    def get_vehicles_by_user_id(self, user_id: int) -> list[Vehicle]:
+        cursor = self.conn.cursor()
+        query = """
+            SELECT id, placa, marca, modelo, ano, cor
+            FROM vehicles
+            WHERE user_id = %s
+        """
+        cursor.execute(query, (user_id,))
+        rows = cursor.fetchall()
+        cursor.close()
+
+        vehicles = []
+        for row in rows:
+            vehicles.append(Vehicle(
+                id=row[0],
+                plate=row[1],
+                brand=row[2],
+                model=row[3],
+                year=row[4],
+                color=row[5]
+            ))
+        return vehicles
     
     def update_vehicle(self, vehicle: Vehicle) -> None:
         print(f"Atualizando veículo: {vehicle}")

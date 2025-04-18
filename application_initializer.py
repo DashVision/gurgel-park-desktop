@@ -27,7 +27,7 @@ def initialize_application():
         print("Instanciando o VehiclesController...")
         vehicles_repository = VehiclesRepository()
         user_repository = UserRepository()
-        vehicles_controller = VehiclesController(vehicles_repository, user_repository)
+        vehicles_controller = VehiclesController(vehicles_repository, user_repository, auth_controller)  # Corrigido
 
         # Cria as telas e adiciona ao controlador
         print("Criando as telas...")

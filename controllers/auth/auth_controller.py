@@ -27,28 +27,14 @@ class AuthController:
 
     def handle_login(self, email: str, password: str) -> bool:
         try:
-            print(f"Tentando login com email: {email}")
-            user = self.repository.get_user_by_email(email)  # Atualizado para o novo nome
-
-            if user:
-                print(f"Usuário encontrado: {user}")  # Log para depuração
-                print(f"Senha fornecida: {password}")
-                print(f"Hash armazenado: {user.hashed_password}")
-
-                if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
-                    self.current_email = user.email  # Define o email do usuário logado
-                    self.current_user = user
-                    print("Login bem-sucedido!")  # Log para depuração
-                    return True
-                
-                else:
-                    print("Senha incorreta.")  # Log para depuração
-                    
-            else:
-                print("Usuário não encontrado.")  # Log para depuração
-
+            user = self.repository.get_user_by_email(email)
+            if user and bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+                self.current_email = user.email
+                self.current_user = user  # Certifique-se de que o campo `id` está preenchido
+                print(f"Usuário logado: {self.current_user}")  # Log para depuração
+                return True
+            print("Credenciais inválidas.")  # Log para depuração
             return False
-
         except Exception as e:
             print(f"Erro no handle_login: {e}")
             return False
@@ -117,5 +103,7 @@ class AuthController:
         
     def get_current_user_id(self) -> Optional[int]:
         if self.current_user:
+            print(f"Usuário atual: {self.current_user}")  # Log para depuração
             return self.current_user.id
+        print("Nenhum usuário está logado.")  # Log para depuração
         return None

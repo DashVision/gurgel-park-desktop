@@ -6,10 +6,12 @@ from controllers.auth.auth_controller import AuthController
 from controllers.screens_controller import ScreensController
 
 class CarRegisterWindow(QWidget):
-    def __init__(self, controller, user_id):
+    def __init__(self, screens_controller, auth_controller, vehicles_controller):
         super().__init__()
-        self.controller = controller
-        self.user_id = user_id
+        self.screens_controller = screens_controller
+        self.auth_controller = auth_controller
+        self.vehicles_controller = vehicles_controller
+        self.user_id = self.auth_controller.get_current_user_id()
         self.init_ui()
 
     def init_ui(self):
@@ -29,7 +31,6 @@ class CarRegisterWindow(QWidget):
         # Lista de veículos cadastrados
         self.vehicles_list = QListWidget()
         self.vehicles_list.setMinimumHeight(200)
-        self.load_user_vehicles()
         self.main_layout.addWidget(QLabel("Veículos Cadastrados:"))
         self.main_layout.addWidget(self.vehicles_list)
 
@@ -70,17 +71,37 @@ class CarRegisterWindow(QWidget):
         register_button = QPushButton("Cadastrar Veículo")
         register_button.clicked.connect(self.register_vehicle)
         cancel_button = QPushButton("Cancelar")
-        cancel_button.clicked.connect(self.close)
+        cancel_button.clicked.connect(self.handle_cancel)
         buttons_layout.addWidget(register_button)
         buttons_layout.addWidget(cancel_button)
 
         self.main_layout.addLayout(buttons_layout)
         self.setLayout(self.main_layout)
 
+        # Carrega os veículos do usuário
+        self.load_user_vehicles()
+
+    def handle_cancel(self):
+        """Fecha a janela de cadastro."""
+        self.close()
+        self.screens_controller.set_screen("home")
+
     def load_user_vehicles(self):
-        """Carrega os veículos cadastrados pelo usuário e exibe na lista."""
+        if not self.auth_controller.is_logged_in():
+            self.vehicles_list.clear()
+            self.vehicles_list.addItem("Por favor, faça login para visualizar seus veículos.")
+            print("Usuário não está logado.")  # Log para depuração
+            return
+
+        self.user_id = self.auth_controller.get_current_user_id()
+        if not self.user_id:
+            self.vehicles_list.clear()
+            self.vehicles_list.addItem("Erro ao carregar usuário logado.")
+            print("Erro: user_id é None.")  # Log para depuração
+            return
+
         try:
-            vehicles = self.controller.get_user_vehicles(self.user_id)
+            vehicles = self.vehicles_controller.get_user_vehicles(self.user_id)
             self.vehicles_list.clear()
 
             if not vehicles:
@@ -95,6 +116,11 @@ class CarRegisterWindow(QWidget):
             QMessageBox.critical(self, "Erro", f"Erro ao carregar veículos: {str(e)}")
 
     def register_vehicle(self):
+        self.user_id = self.auth_controller.get_current_user_id()
+        if not self.user_id:
+            QMessageBox.critical(self, "Erro", "Usuário não está logado. Não é possível cadastrar veículos.")
+            return
+
         license_plate = self.placa_input.text().strip().upper()
         brand = self.marca_input.text().strip()
         model = self.modelo_input.text().strip()
@@ -107,12 +133,12 @@ class CarRegisterWindow(QWidget):
             return
 
         try:
-            # Registra o veículo no banco de dados
-            vehicle_id = self.controller.register_vehicle(license_plate, brand, model, year, color, self.user_id)
+            vehicle_id = self.vehicles_controller.register_vehicle(
+                license_plate, brand, model, year, color, self.user_id
+            )
 
-            # Envia solicitação para o segundo usuário, se fornecido
             if second_user_email:
-                if self.controller.send_vehicle_share_request(vehicle_id, second_user_email):
+                if self.vehicles_controller.send_vehicle_share_request(vehicle_id, second_user_email):
                     QMessageBox.information(
                         self,
                         "Solicitação Enviada",
@@ -125,7 +151,6 @@ class CarRegisterWindow(QWidget):
                         f"Não foi possível enviar a solicitação para {second_user_email}.",
                     )
 
-            # Limpa os campos após o cadastro
             self.placa_input.clear()
             self.marca_input.clear()
             self.modelo_input.clear()
@@ -134,8 +159,6 @@ class CarRegisterWindow(QWidget):
             self.second_user_email_input.clear()
 
             QMessageBox.information(self, "Sucesso", "Veículo cadastrado com sucesso!")
-
-            # Recarrega a lista de veículos
             self.load_user_vehicles()
 
         except Exception as e:

@@ -4,11 +4,19 @@ from services.email_service import EmailService
 from services.notifications import NotificationService
 
 class VehiclesController:
-    def __init__(self, repository, notification_repository):
+    def __init__(self, repository, notification_repository, auth_controller):
         self.repository = repository
         self.notification_service = NotificationService(notification_repository)
+        self.auth_controller = auth_controller
+
+    def get_user_vehicles(self, user_id):
+        return self.repository.get_vehicles_by_user_id(user_id)
 
     def register_vehicle(self, plate, brand, model, year, color, user_id, second_user_email=None):
+        if not user_id:
+            print("Erro: user_id é None. Não é possível cadastrar veículos.")  # Log para depuração
+            raise ValueError("Usuário não está logado.")
+
         try:
             vehicle = Vehicle(plate=plate, brand=brand, model=model, year=year, color=color, user_id=user_id)
             vehicle_id = self.repository.create_vehicle(vehicle)
@@ -25,9 +33,6 @@ class VehiclesController:
         except Exception as e:
             print(f"Erro ao registrar veículo: {e}")
             raise
-
-    def get_notifications(self, user_id):
-        return self.notification_service.get_notifications(user_id)
 
     def accept_vehicle_share(self, notification_id, vehicle_id, second_user_id):
         try:

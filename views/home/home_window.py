@@ -112,7 +112,8 @@ class HomeWindow(QWidget):
         animation.start()
 
     def show_vehicle_screen(self):
-        QMessageBox.information(self, "Meus Veículos", "Tela de Meus Veículos em desenvolvimento.")
+        print("Exibindo tela de veículos...")  # Log para depuração
+        self.screens_controller.set_screen("car_register")
 
     def show_status_screen(self):
         QMessageBox.information(self, "Status das Vagas", "Tela de Status das Vagas em desenvolvimento.")
