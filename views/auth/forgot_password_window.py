@@ -51,6 +51,7 @@ class ForgotPasswordWindow(QWidget):
         if self.auth_controller.handle_reset_password(email):
             QMessageBox.information(self, "Sucesso", "Instruções para redefinir a senha foram enviadas para seu email.")
             self.screens_controller.set_screen("login")
+            
         else:
             QMessageBox.warning(self, "Erro", "Email não encontrado.")
 

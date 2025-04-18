@@ -49,3 +49,38 @@ class UserRepository:
 
         print("Nenhum usuário encontrado.")  # Log para depuração
         return None
+    
+    def get_user_by_email(self, email: str) -> Optional[User]:
+        print(f"Buscando usuário com email: {email}")
+        cursor = self.conn.cursor()
+
+        query = "SELECT id, name, email, password FROM users WHERE email = %s"
+        cursor.execute(query, (email,))
+
+        row = cursor.fetchone()
+        cursor.close()
+
+        if row:
+            print(f"Usuário encontrado: {row}")
+            user = User(
+                id=row[0],
+                name=row[1],
+                email=row[2],
+                hashed_password=row[3]
+            )
+            return user
+        
+        print("Nenhum usuário encontrado.")
+        return None
+    
+    def update_password(self, user_id: int, new_password: str) -> None:
+        print(f"Atualizando senha do usuário com ID: {user_id}")
+        cursor = self.conn.cursor()
+
+        query = "UPDATE users SET password = %s WHERE id = %s"
+        cursor.execute(query, (new_password, user_id))
+
+        self.conn.commit()
+        cursor.close()
+        
+        print("Senha atualizada com sucesso!")
