@@ -21,3 +21,6 @@ CREATE TABLE vehicles (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+SELECT * FROM users;
+INSERT INTO users (name, email, password) values ("admin@", "admin@", "admin@")
