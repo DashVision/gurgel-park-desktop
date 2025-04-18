@@ -46,17 +46,14 @@ class NewPasswordWindow(QWidget):
         self.setLayout(layout)
 
     def handle_create_new_password(self):
-        # Recupera o email do AuthController
         email = self.auth_controller.current_email
         if not email:
             QMessageBox.warning(self, "Erro!", "Nenhum email associado à redefinição de senha.")
             return
 
-        # Obtém as senhas inseridas pelo usuário
         new_password = self.new_password_input.text()
         confirm_password = self.confirm_password_input.text()
 
-        # Valida os campos
         if new_password == "" or confirm_password == "":
             QMessageBox.warning(self, "Erro!", "Preencha os campos pelo menos")
             return
@@ -65,7 +62,6 @@ class NewPasswordWindow(QWidget):
             QMessageBox.warning(self, "Erro!", "As senhas não coincidem")
             return
 
-        # Atualiza a senha no AuthController
         if self.auth_controller.update_password(email, new_password):
             QMessageBox.information(self, "Sucesso!", "Senha atualizada com sucesso!")
             self.screens_controller.set_screen("login")

@@ -6,11 +6,12 @@ from controllers.screens_controller import ScreensController
 
 
 class HomeWindow(QWidget):
-    def __init__(self, screens_controller: ScreensController, auth_controller: AuthController):
+    def __init__(self, screens_controller: ScreensController, auth_controller: AuthController, vehicles_controller):
         super().__init__()
         print("Inicializando HomeWindow...")  # Log para depuração
         self.screens_controller = screens_controller
         self.auth_controller = auth_controller
+        self.vehicles_controller = vehicles_controller
         self.is_sidebar_visible = True
         self.init_ui()
 
@@ -71,6 +72,7 @@ class HomeWindow(QWidget):
 
         self.main_layout.addLayout(self.content_layout)
         self.setLayout(self.main_layout)
+        self.check_notifications()
 
     def populate_menu(self):
         for item in self.menu_items:
@@ -125,3 +127,28 @@ class HomeWindow(QWidget):
         self.auth_controller.logout()
         self.screens_controller.set_screen("login")
         QMessageBox.information(self, "Logout", "Você foi desconectado com sucesso.")
+
+    def check_notifications(self):
+        # Verifica se o usuário está logado
+        if not self.auth_controller.is_logged_in():
+            print("Usuário não está logado. Notificações não serão verificadas.")  # Log para depuração
+            return
+
+        user_id = self.auth_controller.get_current_user_id()
+        if not user_id:
+            QMessageBox.warning(self, "Erro", "Usuário não está logado.")
+            return
+
+        notifications = self.vehicles_controller.get_notifications(user_id)
+        if notifications:
+            QMessageBox.information(
+                self,
+                "Notificações Pendentes",
+                f"Você tem {len(notifications)} notificações pendentes.",
+            )
+        else:
+            QMessageBox.information(
+                self,
+                "Sem Notificações",
+                "Você não tem nenhuma notificação pendente."
+            )

@@ -51,9 +51,8 @@ class UserRepository:
         return None
     
     def get_user_by_email(self, email: str) -> Optional[User]:
-        print(f"Buscando usuário com email: {email}")
+        print(f"Buscando usuário com email: {email}")  # Log para depuração
         cursor = self.conn.cursor()
-
         query = "SELECT id, name, email, password FROM users WHERE email = %s"
         cursor.execute(query, (email,))
 
@@ -61,16 +60,16 @@ class UserRepository:
         cursor.close()
 
         if row:
-            print(f"Usuário encontrado: {row}")
+            print(f"Usuário encontrado: {row}")  # Log para depuração
             user = User(
                 id=row[0],
                 name=row[1],
                 email=row[2],
-                hashed_password=row[3]
+                hashed_password=row[3]  # Retorna o hash armazenado
             )
             return user
-        
-        print("Nenhum usuário encontrado.")
+
+        print("Nenhum usuário encontrado.")  # Log para depuração
         return None
 
     def update_user_password(self, email: str, hashed_password: str) -> None:

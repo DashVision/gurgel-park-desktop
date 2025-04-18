@@ -2,6 +2,7 @@ from repositories.auth.user_repository import UserRepository
 from models.auth.user import User
 import bcrypt
 from services.email_service import EmailService
+from typing import Optional
 
 class AuthController:
     def __init__(self) -> None:
@@ -10,6 +11,7 @@ class AuthController:
             self.repository = UserRepository()
             self.recovery_codes = {}
             self.current_email = None
+            self.current_user = None  # Armazena o usuário logado
             print("AuthController inicializado com sucesso!")  # Log para depuração
 
         except Exception as e:
@@ -26,7 +28,7 @@ class AuthController:
     def handle_login(self, email: str, password: str) -> bool:
         try:
             print(f"Tentando login com email: {email}")
-            user = self.repository.get_user_by_credentials(email)
+            user = self.repository.get_user_by_email(email)  # Atualizado para o novo nome
 
             if user:
                 print(f"Usuário encontrado: {user}")  # Log para depuração
@@ -35,6 +37,7 @@ class AuthController:
 
                 if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
                     self.current_email = user.email  # Define o email do usuário logado
+                    self.current_user = user
                     print("Login bem-sucedido!")  # Log para depuração
                     return True
                 
@@ -111,3 +114,8 @@ class AuthController:
         except Exception as e:
             print(f"Erro no update_password: {e}")
             return False
+        
+    def get_current_user_id(self) -> Optional[int]:
+        if self.current_user:
+            return self.current_user.id
+        return None
