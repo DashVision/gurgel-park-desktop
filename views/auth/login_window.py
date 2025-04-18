@@ -4,11 +4,11 @@ from PyQt5.QtCore import Qt
 from controllers.auth.auth_controller import AuthController
 
 class LoginWindow(QWidget):
-    def __init__(self, screens_controller):
+    def __init__(self, screens_controller, auth_controller):
         super().__init__()
         print("Inicializando LoginWindow...")  # Log para depuração
         self.screens_controller = screens_controller
-        self.auth_controller = AuthController()
+        self.auth_controller = auth_controller  # Adiciona o auth_controller
         self.init_ui()
 
     def init_ui(self):

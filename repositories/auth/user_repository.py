@@ -72,15 +72,15 @@ class UserRepository:
         
         print("Nenhum usuário encontrado.")
         return None
-    
-    def update_password(self, user_id: int, new_password: str) -> None:
-        print(f"Atualizando senha do usuário com ID: {user_id}")
+
+    def update_user_password(self, email: str, hashed_password: str) -> None:
+        print(f"Atualizando senha para o email: {email}")  # Log para depuração
         cursor = self.conn.cursor()
 
-        query = "UPDATE users SET password = %s WHERE id = %s"
-        cursor.execute(query, (new_password, user_id))
-
+        query = "UPDATE users SET password = %s WHERE email = %s"
+        cursor.execute(query, (hashed_password, email))
         self.conn.commit()
         cursor.close()
-        
-        print("Senha atualizada com sucesso!")
+
+        print("Senha atualizada com sucesso!")  # Log para depuração
+

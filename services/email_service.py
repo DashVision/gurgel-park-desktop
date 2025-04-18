@@ -12,6 +12,8 @@ class EmailService:
         code = secrets.randbelow(10**6)
         codigo_6_digitos = str(code).zfill(6)
 
+        print(f"Código gerado: {codigo_6_digitos}")
+
         email_bot = os.getenv("EMAIL_BOT")
         senha_bot = os.getenv("SENHA_BOT")
 
@@ -26,13 +28,10 @@ class EmailService:
                 smtp.login(email_bot, senha_bot)
                 smtp.send_message(msg)
 
+            print(f"[E-mail enviado para {receiver}] Código de recuperação: {codigo_6_digitos}")
+
             return codigo_6_digitos
         
         except Exception as e:
             print(f"[Erro no envio de e-mail] {e}")
             return None
-        
-        finally:
-            msg.clear()
-            smtp.quit()
-            smtp.close()

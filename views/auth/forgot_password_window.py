@@ -3,11 +3,11 @@ from controllers.auth.auth_controller import AuthController
 from PyQt5.QtCore import Qt
 
 class ForgotPasswordWindow(QWidget):
-    def __init__(self, screens_controller):
+    def __init__(self, screens_controller, auth_controller):
         super().__init__()
         print("Inicializando ForgotPasswordWindow...")  # Log para depuração
-        self.auth_controller = AuthController()
         self.screens_controller = screens_controller
+        self.auth_controller = auth_controller  # Adiciona o auth_controller
         self.init_ui()
 
     def init_ui(self):
@@ -49,8 +49,11 @@ class ForgotPasswordWindow(QWidget):
             return
 
         if self.auth_controller.handle_reset_password(email):
+            self.auth_controller.current_email = email  # Armazena o email no AuthController
+            print(f"Email armazenado no AuthController: {self.auth_controller.current_email}")  # Log para depuração
+            
             QMessageBox.information(self, "Sucesso", "Instruções para redefinir a senha foram enviadas para seu email.")
-            self.screens_controller.set_screen("login")
+            self.screens_controller.set_screen("confirm_code")
             
         else:
             QMessageBox.warning(self, "Erro", "Email não encontrado.")
