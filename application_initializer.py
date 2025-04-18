@@ -9,6 +9,7 @@ from views.auth.register_window import RegisterWindow
 from views.auth.new_password_window import NewPasswordWindow
 from views.auth.confirm_code_window import ConfirmCodeWindow
 from views.home.home_window import HomeWindow
+from views.home.car_register_window import CarRegisterWindow
 
 def initialize_application():
     print("Inicializando o aplicativo...")  # Log para depuração
@@ -43,6 +44,7 @@ def initialize_application():
         screens_controller.add_screen("new_password", new_password_window)
         screens_controller.add_screen("confirm_code", confirm_code_window)
         screens_controller.add_screen("home", home_window)
+        screens_controller.add_screen("car_register", CarRegisterWindow(screens_controller, auth_controller, vehicles_controller))
 
         screens_controller.auth_controller = auth_controller
 

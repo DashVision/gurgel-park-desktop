@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from controllers.auth.auth_controller import AuthController
 from controllers.screens_controller import ScreensController
 
-class VehicleRegistrationView(QWidget):
+class CarRegisterWindow(QWidget):
     def __init__(self, controller, user_id):
         super().__init__()
         self.controller = controller
@@ -25,6 +25,13 @@ class VehicleRegistrationView(QWidget):
         title.setAlignment(Qt.AlignCenter)
         header_layout.addWidget(title)
         self.main_layout.addLayout(header_layout)
+
+        # Lista de veículos cadastrados
+        self.vehicles_list = QListWidget()
+        self.vehicles_list.setMinimumHeight(200)
+        self.load_user_vehicles()
+        self.main_layout.addWidget(QLabel("Veículos Cadastrados:"))
+        self.main_layout.addWidget(self.vehicles_list)
 
         # Formulário de cadastro
         form_layout = QFormLayout()
@@ -70,6 +77,23 @@ class VehicleRegistrationView(QWidget):
         self.main_layout.addLayout(buttons_layout)
         self.setLayout(self.main_layout)
 
+    def load_user_vehicles(self):
+        """Carrega os veículos cadastrados pelo usuário e exibe na lista."""
+        try:
+            vehicles = self.controller.get_user_vehicles(self.user_id)
+            self.vehicles_list.clear()
+
+            if not vehicles:
+                self.vehicles_list.addItem("Nenhum veículo cadastrado.")
+                return
+
+            for vehicle in vehicles:
+                item_text = f"{vehicle.plate} - {vehicle.brand} {vehicle.model} ({vehicle.year})"
+                self.vehicles_list.addItem(item_text)
+
+        except Exception as e:
+            QMessageBox.critical(self, "Erro", f"Erro ao carregar veículos: {str(e)}")
+
     def register_vehicle(self):
         license_plate = self.placa_input.text().strip().upper()
         brand = self.marca_input.text().strip()
@@ -110,7 +134,9 @@ class VehicleRegistrationView(QWidget):
             self.second_user_email_input.clear()
 
             QMessageBox.information(self, "Sucesso", "Veículo cadastrado com sucesso!")
-            self.close()
+
+            # Recarrega a lista de veículos
+            self.load_user_vehicles()
 
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao cadastrar veículo: {str(e)}")
