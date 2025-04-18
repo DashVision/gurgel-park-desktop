@@ -40,17 +40,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# if __name__ == "__main__":
-#     from PyQt5.QtWidgets import QApplication, QLabel
-#     app = QApplication(sys.argv)
-
-#     screens_controller = ScreensController()
-
-#     # Adicione uma tela de teste
-#     test_screen = QLabel("Tela de Teste")
-#     screens_controller.add_screen("test", test_screen)
-#     screens_controller.set_screen("test")
-
-#     screens_controller.show()
-#     sys.exit(app.exec_())
