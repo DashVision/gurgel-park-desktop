@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
 from PyQt5.QtCore import Qt
 from controllers.auth.auth_controller import AuthController
+from controllers.screens_controller import ScreensController
 from models.auth.email import Email  # Importando a classe Email
 
 
@@ -8,7 +9,8 @@ class RegisterWindow(QWidget):
     def __init__(self, screens_controller, auth_controller=None):
         super().__init__()
         self.auth_controller = AuthController()
-        print("Iniciando construtor do RegisterWindow...")  # Log para depuração        self.screens_controller = screens_controller
+        self.screens_controller = screens_controller
+        print("Iniciando construtor do RegisterWindow...")  # Log para depuração
         print("Inicializando UI do RegisterWindow...")  # Log para depuração
         self.init_ui()
         print("RegisterWindow inicializado com sucesso!")  # Log para depuração
@@ -71,7 +73,7 @@ class RegisterWindow(QWidget):
             QMessageBox.warning(self, "Erro", str(e))
 
     def handle_return_to_login(self) -> None:
-        # Retorna para a tela de login
+        print("Tentando voltar para a tela de login...")  # Log para depuração
         self.screens_controller.set_screen("login")
 
 

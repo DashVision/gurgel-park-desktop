@@ -10,6 +10,7 @@ class ScreensController(QStackedWidget):
         index = self.addWidget(widget)
         self.screens[name] = index
         print(f"Tela '{name}' adicionada no índice {index}")
+        print(f"Telas atualmente registradas: {list(self.screens.keys())}")  # Log adicional
 
     def set_screen(self, name) -> None:
         if name in self.screens:
