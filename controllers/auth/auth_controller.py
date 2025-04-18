@@ -14,12 +14,13 @@ class AuthController:
 
     def handle_login(self, email: str, password: str) -> bool:
         try:
-            user = self.repository.get_user_by_credentials(email, password)
+            user = self.repository.get_user_by_credentials(email)
 
-            if user:
-                self.show_main_app(user.id)                
+            if user and bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+                self.show_main_app(user.id)
                 return True
 
+            print("Credenciais inválidas.")  # Log para depuração
             return False
 
         except Exception as e:

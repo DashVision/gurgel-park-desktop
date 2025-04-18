@@ -28,11 +28,11 @@ class UserRepository:
         cursor.close()
         print("Usuário criado com sucesso!")  # Log para depuração
 
-    def get_user_by_credentials(self, email: str, password: str) -> Optional[User]:
-        print(f"Buscando usuário com email: {email} e senha: {password}")  # Log para depuração
+    def get_user_by_credentials(self, email: str) -> Optional[User]:
+        print(f"Buscando usuário com email: {email}")  # Log para depuração
         cursor = self.conn.cursor()
-        query = "SELECT id, name, email, password FROM users WHERE email = %s AND password = %s"
-        cursor.execute(query, (email, password))
+        query = "SELECT id, name, email, password FROM users WHERE email = %s"
+        cursor.execute(query, (email,))
 
         row = cursor.fetchone()
         cursor.close()
@@ -43,7 +43,7 @@ class UserRepository:
                 id=row[0],
                 name=row[1],
                 email=row[2],
-                hashed_password=row[3]
+                hashed_password=row[3]  # Retorna o hash armazenado
             )
             return user
 
