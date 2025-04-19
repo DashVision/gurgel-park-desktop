@@ -46,7 +46,7 @@ class EmailService:
             msg["From"] = email_bot
             msg["To"] = receiver
             msg["Subject"] = "Solicitação de Compartilhamento de Veículo"
-            msg.set_content(f"Você recebeu uma solicitação para compartilhar o veículo {vehicle_plate}.", charset="utf-8")
+            msg.set_content(f"Você recebeu uma solicitação para compartilhar o veículo {vehicle_plate}, verifique suas notificações no app. Caso não possua nenhum cadastro ignore essa mensagem", charset="utf-8")
 
             with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
                 smtp.login(email_bot, senha_bot)

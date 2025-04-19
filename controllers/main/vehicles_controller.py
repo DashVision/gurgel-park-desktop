@@ -62,3 +62,17 @@ class VehiclesController:
         vehicle = self.repository.get_vehicle_by_credentials(placa)
         if vehicle:
             self.repository.delete_vehicle(vehicle["id"])
+
+    def send_vehicle_share_request(self, plate, email):
+        try:
+            # Verifica se o veículo existe
+            vehicle = self.get_vehicle_by_plate(plate)
+            if not vehicle:
+                raise ValueError("Veículo não encontrado.")
+
+            # Envia o email de solicitação de compartilhamento
+            EmailService.send_vehicle_share_request(email, plate)
+            print(f"Solicitação de compartilhamento enviada para {email} sobre o veículo {plate}.")
+        except Exception as e:
+            print(f"Erro ao enviar solicitação de compartilhamento: {e}")
+            raise
