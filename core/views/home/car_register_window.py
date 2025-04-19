@@ -48,6 +48,11 @@ class CarRegisterWindow(QWidget):
         existing_vehicle_btn.clicked.connect(self.show_existing_vehicle_form)
         self.menu_layout.addWidget(existing_vehicle_btn)
 
+        # Botão para voltar
+        back_to_home_btn = QPushButton("Voltar")
+        back_to_home_btn.clicked.connect(self.handle_cancel)
+        self.menu_layout.addWidget(back_to_home_btn)
+
         # Tela de veículos cadastrados
         self.my_vehicles_widget = QWidget()
         self.my_vehicles_layout = QVBoxLayout()
