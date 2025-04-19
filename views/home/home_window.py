@@ -128,9 +128,8 @@ class HomeWindow(QWidget):
         QMessageBox.information(self, "Logout", "Você foi desconectado com sucesso.")
 
     def check_notifications(self):
-        # Verifica se o usuário está logado
         if not self.auth_controller.is_logged_in():
-            print("Usuário não está logado. Notificações não serão verificadas.")  # Log para depuração
+            print("Usuário não está logado. Notificações não serão verificadas.")
             return
 
         user_id = self.auth_controller.get_current_user_id()
@@ -138,16 +137,22 @@ class HomeWindow(QWidget):
             QMessageBox.warning(self, "Erro", "Usuário não está logado.")
             return
 
-        notifications = self.vehicles_controller.get_notifications(user_id)
+        notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
         if notifications:
-            QMessageBox.information(
-                self,
-                "Notificações Pendentes",
-                f"Você tem {len(notifications)} notificações pendentes.",
-            )
+            for notification in notifications:
+                response = QMessageBox.question(
+                    self,
+                    "Nova Solicitação",
+                    notification["message"],
+                    QMessageBox.Yes | QMessageBox.No,
+                )
+                if response == QMessageBox.Yes:
+                    self.vehicles_controller.accept_vehicle_share(
+                        notification["id"], notification["vehicle_id"], user_id
+                    )
+                    QMessageBox.information(self, "Sucesso", "Solicitação aceita.")
+                else:
+                    self.vehicles_controller.reject_vehicle_share(notification["id"])
+                    QMessageBox.information(self, "Rejeitada", "Solicitação rejeitada.")
         else:
-            QMessageBox.information(
-                self,
-                "Sem Notificações",
-                "Você não tem nenhuma notificação pendente."
-            )
+            QMessageBox.information(self, "Sem Notificações", "Você não tem nenhuma notificação pendente.")

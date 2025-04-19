@@ -38,7 +38,14 @@ class VehiclesController:
         try:
             self.repository.associate_vehicle_to_user(vehicle_id, second_user_id)
             self.notification_service.clear_notification(notification_id)
-            print("Solicitação de compartilhamento aceita.")
+
+            # Notifica o solicitante
+            requester = self.repository.get_user_by_id(second_user_id)
+            vehicle = self.get_vehicle_by_id(vehicle_id)
+            message = f"Sua solicitação para compartilhar o veículo {vehicle['plate']} foi aceita."
+            self.notification_service.add_notification(requester["id"], vehicle_id, message)
+
+            print("Solicitação de compartilhamento aceita e notificação enviada ao solicitante.")
         except Exception as e:
             print(f"Erro ao aceitar solicitação de compartilhamento: {e}")
             raise
@@ -46,7 +53,15 @@ class VehiclesController:
     def reject_vehicle_share(self, notification_id):
         try:
             self.notification_service.clear_notification(notification_id)
-            print("Solicitação de compartilhamento rejeitada.")
+
+            # Notifica o solicitante
+            notification = self.notification_service.get_notification_by_id(notification_id)
+            requester = self.repository.get_user_by_id(notification["user_id"])
+            vehicle = self.get_vehicle_by_id(notification["vehicle_id"])
+            message = f"Sua solicitação para compartilhar o veículo {vehicle['plate']} foi rejeitada."
+            self.notification_service.add_notification(requester["id"], vehicle["id"], message)
+
+            print("Solicitação de compartilhamento rejeitada e notificação enviada ao solicitante.")
         except Exception as e:
             print(f"Erro ao rejeitar solicitação de compartilhamento: {e}")
             raise
@@ -72,7 +87,19 @@ class VehiclesController:
 
             # Envia o email de solicitação de compartilhamento
             EmailService.send_vehicle_share_request(email, plate)
-            print(f"Solicitação de compartilhamento enviada para {email} sobre o veículo {plate}.")
+
+            # Busca o usuário portador do veículo
+            owner = self.auth_controller.repository.get_user_by_id(vehicle["user_id"])
+            if not owner:
+                raise ValueError("Usuário portador do veículo não encontrado.")
+
+            # Registra a notificação para o portador do veículo
+            message = f"O usuário {email} solicitou compartilhar o veículo {plate}."
+            self.notification_service.add_notification(owner["id"], vehicle["id"], message)
+
+            print(f"Solicitação de compartilhamento enviada para {email} e notificação registrada para o portador do veículo.")
+            return "Solicitação enviada com sucesso!"
+        
         except Exception as e:
             print(f"Erro ao enviar solicitação de compartilhamento: {e}")
-            raise
+            return f"Erro ao enviar solicitação: {e}"

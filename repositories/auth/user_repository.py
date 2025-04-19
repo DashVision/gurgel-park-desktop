@@ -93,3 +93,23 @@ class UserRepository:
 
         print("Senha atualizada com sucesso!")  # Log para depuração
 
+    def get_user_by_id(self, user_id):
+        """Obtém um usuário pelo ID."""
+        try:
+            cursor = self.conn.cursor()
+            query = "SELECT id, name, email FROM users WHERE id = %s"
+            cursor.execute(query, (user_id,))
+            row = cursor.fetchone()
+            cursor.close()
+
+            if row:
+                return {
+                    "id": row[0],
+                    "name": row[1],
+                    "email": row[2],
+                }
+            return None
+        except Exception as e:
+            print(f"Erro ao buscar usuário por ID: {e}")
+            raise
+

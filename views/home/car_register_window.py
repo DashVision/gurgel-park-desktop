@@ -218,15 +218,18 @@ class CarRegisterWindow(QWidget):
         email = self.existing_email_input.text().strip()
 
         if not plate or not email:
-            QMessageBox.warning(self, "Erro", "Por favor, preencha todos os campos.")
+            QMessageBox.warning(self, "Erro", "Preencha todos os campos.")
             return
 
-        try:
-            self.vehicles_controller.send_vehicle_share_request(plate, email)
-            QMessageBox.information(self, "Sucesso", "Solicitação enviada com sucesso!")
+        # Chama o método do controlador para enviar a solicitação
+        result = self.vehicles_controller.send_vehicle_share_request(plate, email)
+
+        # Exibe o resultado ao usuário
+        if "sucesso" in result.lower():
+            QMessageBox.information(self, "Sucesso", result)
             self.show_menu()
-        except Exception as e:
-            QMessageBox.critical(self, "Erro", f"Erro ao enviar solicitação: {str(e)}")
+        else:
+            QMessageBox.critical(self, "Erro", result)
 
     def edit_vehicle(self):
         """Abre um formulário para editar o veículo selecionado."""
