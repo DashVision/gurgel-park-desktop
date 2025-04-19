@@ -32,5 +32,14 @@ CREATE TABLE notifications (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 );
 
+CREATE TABLE vehicle_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 SELECT * FROM users;
 INSERT INTO users (name, email, password) values ("admin@", "admin@", "admin@")
