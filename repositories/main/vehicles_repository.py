@@ -35,28 +35,24 @@ class VehiclesRepository:
         print("Veículo criado com sucesso!")
         return vehicle_id
 
-    def get_vehicle_by_credentials(self, plate: str) -> Optional[Vehicle]:
-        print(f"Buscando veículo com placa: {plate}")
+    def get_vehicle_by_credentials(self, placa):
         cursor = self.conn.cursor()
-        query = "SELECT id, plate, brand, model, year, color FROM vehicles WHERE plate = %s"
-        cursor.execute(query, (plate,))
-
-        row = cursor.fetchone()
+        query = "SELECT id, placa, marca, modelo, ano, cor, user_id FROM vehicles WHERE placa = %s"
+        cursor.execute(query, (placa,))
+        result = cursor.fetchone()
         cursor.close()
 
-        if row:
-            print(f"Veículo encontrado: {row}")
-            vehicle = Vehicle(
-                id=row[0],
-                plate=row[1],
-                brand=row[2],
-                model=row[3],
-                year=row[4],
-                color=row[5]
-            )
-            return vehicle
-
-        print("Nenhum veículo encontrado.")
+        if result:
+            # Retorna um dicionário com os dados do veículo
+            return {
+                "id": result[0],
+                "placa": result[1],
+                "marca": result[2],
+                "modelo": result[3],
+                "ano": result[4],
+                "cor": result[5],
+                "user_id": result[6],
+            }
         return None
     
     def get_vehicle_by_id(self, vehicle_id: int) -> Optional[Vehicle]:
@@ -110,7 +106,11 @@ class VehiclesRepository:
         print(f"Atualizando veículo: {vehicle}")
         cursor = self.conn.cursor()
 
-        query = "UPDATE vehicles SET plate = %s, brand = %s, model = %s, year = %s, color = %s WHERE id = %s"
+        query = """
+            UPDATE vehicles
+            SET placa = %s, marca = %s, modelo = %s, ano = %s, cor = %s
+            WHERE id = %s
+        """
         cursor.execute(query, (vehicle.plate, vehicle.brand, vehicle.model, vehicle.year, vehicle.color, vehicle.id))
         self.conn.commit()
         cursor.close()
@@ -123,3 +123,31 @@ class VehiclesRepository:
         self.conn.commit()
         cursor.close()
         print("Veículo associado ao usuário com sucesso!")
+
+    def delete_vehicle(self, vehicle_id):
+        cursor = self.conn.cursor()
+        query = "DELETE FROM vehicles WHERE id = %s"
+        cursor.execute(query, (vehicle_id,))
+        self.conn.commit()
+        cursor.close()
+        print("Veículo deletado com sucesso!")
+
+    def get_vehicle_by_plate(self, placa):
+        cursor = self.conn.cursor()
+        query = "SELECT id, placa, marca, modelo, ano, cor, user_id FROM vehicles WHERE placa = %s"
+        cursor.execute(query, (placa,))
+        result = cursor.fetchone()
+        cursor.close()
+
+        if result:
+            # Retorna um dicionário com os dados do veículo
+            return {
+                "id": result[0],
+                "placa": result[1],
+                "marca": result[2],
+                "modelo": result[3],
+                "ano": result[4],
+                "cor": result[5],
+                "user_id": result[6],
+            }
+        return None

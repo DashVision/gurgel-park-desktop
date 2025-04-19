@@ -50,3 +50,15 @@ class VehiclesController:
         except Exception as e:
             print(f"Erro ao rejeitar solicitação de compartilhamento: {e}")
             raise
+
+    def get_vehicle_by_plate(self, placa):
+        return self.repository.get_vehicle_by_plate(placa)
+
+    def update_vehicle(self, vehicle_id, plate, brand, model, year, color):
+        vehicle = Vehicle(id=vehicle_id, plate=plate, brand=brand, model=model, year=year, color=color)
+        self.repository.update_vehicle(vehicle)
+
+    def delete_vehicle_by_plate(self, placa):
+        vehicle = self.repository.get_vehicle_by_credentials(placa)
+        if vehicle:
+            self.repository.delete_vehicle(vehicle["id"])
