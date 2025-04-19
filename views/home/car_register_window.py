@@ -222,7 +222,7 @@ class CarRegisterWindow(QWidget):
             return
 
         # Chama o método do controlador para enviar a solicitação
-        result = self.vehicles_controller.send_vehicle_share_request(plate, email)
+        result = self.vehicles_controller.send_vehicle_share_request(plate, email) # Consertar aqui
 
         # Exibe o resultado ao usuário
         if "sucesso" in result.lower():

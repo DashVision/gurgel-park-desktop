@@ -2,6 +2,8 @@ from controllers.screens_controller import ScreensController
 from controllers.auth.auth_controller import AuthController
 from controllers.main.vehicles_controller import VehiclesController
 from repositories.main.vehicles_repository import VehiclesRepository
+from services.notifications import NotificationService
+from repositories.main.notifications_repository import NotificationsRepository
 from repositories.auth.user_repository import UserRepository
 from views.auth.login_window import LoginWindow
 from views.auth.forgot_password_window import ForgotPasswordWindow
@@ -21,11 +23,22 @@ def initialize_application():
         print("Instanciando o AuthController...")
         auth_controller = AuthController()
 
+        # Instancia os repositórios
+        print("Instanciando os repositórios...")
+        vehicles_repository = VehiclesRepository()
+        notifications_repository = NotificationsRepository()
+        user_repository = UserRepository()
+
+        # Instancia o NotificationService
+        notification_service = NotificationService(notifications_repository)
+
         # Instancia o VehiclesController
         print("Instanciando o VehiclesController...")
-        vehicles_repository = VehiclesRepository()
-        user_repository = UserRepository()
-        vehicles_controller = VehiclesController(vehicles_repository, user_repository, auth_controller)  # Corrigido
+        vehicles_controller = VehiclesController(
+            repository=vehicles_repository,
+            notification_repository=notifications_repository,
+            auth_controller=auth_controller
+        )
 
         # Cria as telas e adiciona ao controlador
         print("Criando as telas...")

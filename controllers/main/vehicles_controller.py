@@ -86,10 +86,11 @@ class VehiclesController:
                 raise ValueError("Veículo não encontrado.")
 
             # Envia o email de solicitação de compartilhamento
-            EmailService.send_vehicle_share_request(email, plate)
+            EmailService.send_vehicle_share_request(email, plate) # Para aqui
 
             # Busca o usuário portador do veículo
-            owner = self.auth_controller.repository.get_user_by_id(vehicle["user_id"])
+            owner = self.auth_controller.repository.get_user_by_id(vehicle["user_id"]) # Aqui mais ou menos
+            print(owner)
             if not owner:
                 raise ValueError("Usuário portador do veículo não encontrado.")
 
