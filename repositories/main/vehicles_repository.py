@@ -116,13 +116,17 @@ class VehiclesRepository:
         cursor.close()
         print("Veículo atualizado com sucesso!")
 
-    def associate_vehicle_to_user(self, vehicle_id, user_id):
-        cursor = self.conn.cursor()
-        query = "INSERT INTO vehicle_users (vehicle_id, user_id) VALUES (%s, %s)"
-        cursor.execute(query, (vehicle_id, user_id))
-        self.conn.commit()
-        cursor.close()
-        print("Veículo associado ao usuário com sucesso!")
+    def associate_vehicle_to_user(self, vehicle_id: int, user_id: int) -> None:
+        try:
+            cursor = self.conn.cursor()
+            query = "INSERT INTO vehicle_users (vehicle_id, user_id) VALUES (%s, %s)"
+            cursor.execute(query, (vehicle_id, user_id))
+            self.conn.commit()
+            cursor.close()
+            print("Veículo associado ao usuário com sucesso!")
+        except Exception as e:
+            print(f"Erro ao associar veículo ao usuário: {e}")
+            raise
 
     def delete_vehicle(self, vehicle_id):
         cursor = self.conn.cursor()
@@ -151,3 +155,29 @@ class VehiclesRepository:
                 "user_id": result[6],
             }
         return None
+
+    def get_users_by_vehicle_id(self, vehicle_id: int) -> list[int]:
+        """Obtém os IDs dos usuários associados a um veículo."""
+        try:
+            cursor = self.conn.cursor()
+            query = "SELECT user_id FROM vehicle_users WHERE vehicle_id = %s"
+            cursor.execute(query, (vehicle_id,))
+            rows = cursor.fetchall()
+            cursor.close()
+            return [row[0] for row in rows]
+        except Exception as e:
+            print(f"Erro ao buscar usuários associados ao veículo: {e}")
+            raise
+
+    def is_vehicle_shared_with_user(self, vehicle_id: int, user_id: int) -> bool:
+        """Verifica se um veículo já está compartilhado com um usuário."""
+        try:
+            cursor = self.conn.cursor()
+            query = "SELECT COUNT(*) FROM vehicle_users WHERE vehicle_id = %s AND user_id = %s"
+            cursor.execute(query, (vehicle_id, user_id))
+            count = cursor.fetchone()[0]
+            cursor.close()
+            return count > 0
+        except Exception as e:
+            print(f"Erro ao verificar compartilhamento de veículo: {e}")
+            raise

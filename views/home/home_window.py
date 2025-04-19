@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QListWidgetItem, QStackedWidget, QMessageBox)
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QShowEvent
 from controllers.auth.auth_controller import AuthController
 from controllers.screens_controller import ScreensController
 
@@ -48,7 +48,7 @@ class HomeWindow(QWidget):
         self.menu_items = [
             {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
             {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
-            {"text": "Histórico", "icon": "history-icon.png", "action": self.show_history_screen},
+            {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
             {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
             {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
         ]
@@ -71,7 +71,6 @@ class HomeWindow(QWidget):
 
         self.main_layout.addLayout(self.content_layout)
         self.setLayout(self.main_layout)
-        self.check_notifications()
 
     def populate_menu(self):
         for item in self.menu_items:
@@ -116,6 +115,9 @@ class HomeWindow(QWidget):
     def show_status_screen(self):
         QMessageBox.information(self, "Status das Vagas", "Tela de Status das Vagas em desenvolvimento.")
     
+    def show_notifications_screen(self):
+        self.screens_controller.set_screen("notifications")
+
     def show_history_screen(self):
         QMessageBox.information(self, "Histórico", "Tela de Histórico em desenvolvimento.")
 
@@ -128,15 +130,16 @@ class HomeWindow(QWidget):
         QMessageBox.information(self, "Logout", "Você foi desconectado com sucesso.")
 
     def check_notifications(self):
+        """Verifica notificações apenas se o usuário estiver logado."""
         if not self.auth_controller.is_logged_in():
-            print("Usuário não está logado. Notificações não serão verificadas.")
-            return
+            return  # Sai imediatamente se o usuário não estiver logado
 
         user_id = self.auth_controller.get_current_user_id()
         if not user_id:
-            QMessageBox.warning(self, "Erro", "Usuário não está logado.")
+            print("check_notifications: ID do usuário não encontrado. Ignorando.")
             return
 
+        print(f"check_notifications: Verificando notificações para o usuário {user_id}.")
         notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
         if notifications:
             for notification in notifications:
@@ -155,4 +158,12 @@ class HomeWindow(QWidget):
                     self.vehicles_controller.reject_vehicle_share(notification["id"])
                     QMessageBox.information(self, "Rejeitada", "Solicitação rejeitada.")
         else:
-            QMessageBox.information(self, "Sem Notificações", "Você não tem nenhuma notificação pendente.")
+            print("check_notifications: Nenhuma notificação encontrada.")
+
+    def showEvent(self, event: QShowEvent):
+        """Evita verificar notificações se o usuário não estiver logado."""
+        super().showEvent(event)
+        if not self.auth_controller.is_logged_in():
+            return  # Sai do método se o usuário não estiver logado
+
+        self.check_notifications()

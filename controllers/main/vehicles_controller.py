@@ -2,12 +2,14 @@ from repositories.main.vehicles_repository import VehiclesRepository
 from models.main.vehicles import Vehicle
 from services.email_service import EmailService
 from services.notifications import NotificationService
+from repositories.auth.user_repository import UserRepository
 
 class VehiclesController:
-    def __init__(self, repository, notification_repository, auth_controller):
+    def __init__(self, repository, notification_repository, auth_controller, user_repository: UserRepository):
         self.repository = repository
         self.notification_service = NotificationService(notification_repository)
         self.auth_controller = auth_controller
+        self.user_repository = user_repository  # Adicionado
 
     def get_user_vehicles(self, user_id):
         return self.repository.get_vehicles_by_user_id(user_id)
@@ -36,14 +38,21 @@ class VehiclesController:
 
     def accept_vehicle_share(self, notification_id, vehicle_id, second_user_id):
         try:
+            # Verifica se o veículo já está compartilhado com o usuário
+            if self.repository.is_vehicle_shared_with_user(vehicle_id, second_user_id):
+                raise ValueError("O veículo já está compartilhado com este usuário.")
+
+            # Associa o veículo ao usuário
             self.repository.associate_vehicle_to_user(vehicle_id, second_user_id)
+
+            # Remove a notificação
             self.notification_service.clear_notification(notification_id)
 
             # Notifica o solicitante
-            requester = self.repository.get_user_by_id(second_user_id)
-            vehicle = self.get_vehicle_by_id(vehicle_id)
-            message = f"Sua solicitação para compartilhar o veículo {vehicle['plate']} foi aceita."
-            self.notification_service.add_notification(requester["id"], vehicle_id, message)
+            requester = self.user_repository.get_user_by_id(second_user_id)
+            vehicle = self.repository.get_vehicle_by_id(vehicle_id)
+            message = f"Sua solicitação para compartilhar o veículo {vehicle.plate} foi aceita."
+            self.notification_service.add_notification(requester["id"], vehicle.id, message)
 
             print("Solicitação de compartilhamento aceita e notificação enviada ao solicitante.")
         except Exception as e:
@@ -92,7 +101,7 @@ class VehiclesController:
 
             # Verifica se o solicitante está tentando enviar para si mesmo
             current_user_id = self.auth_controller.get_current_user_id()
-            if current_user_id == vehicle["user_id"]:
+            if (current_user_id == vehicle["user_id"]):
                 raise ValueError("Você não pode solicitar o compartilhamento do seu próprio veículo.")
 
             # Envia o e-mail de solicitação de compartilhamento
@@ -115,3 +124,7 @@ class VehiclesController:
         except Exception as e:
             print(f"Erro inesperado ao enviar solicitação de compartilhamento: {e}")
             return "Erro inesperado ao enviar solicitação."
+
+    def get_shared_users(self, vehicle_id: int) -> list[int]:
+        """Obtém os IDs dos usuários com quem o veículo está compartilhado."""
+        return self.repository.get_users_by_vehicle_id(vehicle_id)

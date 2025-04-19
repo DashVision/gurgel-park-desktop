@@ -12,6 +12,7 @@ from views.auth.new_password_window import NewPasswordWindow
 from views.auth.confirm_code_window import ConfirmCodeWindow
 from views.home.home_window import HomeWindow
 from views.home.car_register_window import CarRegisterWindow
+from views.home.notifications_window import NotificationsWindow
 
 def initialize_application():
     try:
@@ -37,7 +38,8 @@ def initialize_application():
         vehicles_controller = VehiclesController(
             repository=vehicles_repository,
             notification_repository=notifications_repository,
-            auth_controller=auth_controller
+            auth_controller=auth_controller,
+            user_repository=user_repository
         )
 
         # Cria as telas e adiciona ao controlador
@@ -48,6 +50,7 @@ def initialize_application():
         new_password_window = NewPasswordWindow(screens_controller, auth_controller)
         confirm_code_window = ConfirmCodeWindow(screens_controller, auth_controller)
         home_window = HomeWindow(screens_controller, auth_controller, vehicles_controller)
+        notifications_window = NotificationsWindow(vehicles_controller, auth_controller)
 
         screens_controller.add_screen("login", login_window)
         screens_controller.add_screen("forgot_password", forgot_password_window)
@@ -56,6 +59,7 @@ def initialize_application():
         screens_controller.add_screen("confirm_code", confirm_code_window)
         screens_controller.add_screen("home", home_window)
         screens_controller.add_screen("car_register", CarRegisterWindow(screens_controller, auth_controller, vehicles_controller))
+        screens_controller.add_screen("notifications", notifications_window)
 
         screens_controller.auth_controller = auth_controller
 

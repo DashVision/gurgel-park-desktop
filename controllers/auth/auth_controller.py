@@ -19,7 +19,9 @@ class AuthController:
             raise
 
     def is_logged_in(self) -> bool:
-        return self.current_email is not None
+        is_logged = self.current_email is not None
+        print(f"is_logged_in: {is_logged}")
+        return is_logged
     
     def logout(self) -> None:
         self.current_email = None
@@ -107,7 +109,7 @@ class AuthController:
         
     def get_current_user_id(self) -> Optional[int]:
         if self.current_user:
-            print(f"Usuário atual: {self.current_user}")  # Log para depuração
+            print(f"get_current_user_id: Usuário atual: {self.current_user}")
             return self.current_user.id
-        print("Nenhum usuário está logado.")  # Log para depuração
+        print("get_current_user_id: Nenhum usuário está logado.")
         return None
