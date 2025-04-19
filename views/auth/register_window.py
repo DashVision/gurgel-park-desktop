@@ -64,13 +64,16 @@ class RegisterWindow(QWidget):
         try:
             # Valida o email e tenta registrar o usuário
             validated_email = Email(email)
-            if self.auth_controller.handle_register(name, str(validated_email), password):
-                QMessageBox.information(self, "Sucesso", "Usuário registrado com sucesso!")
-                self.screens_controller.set_screen("login")
-            else:
-                QMessageBox.critical(self, "Erro", "Erro ao registrar o usuário.")
+            self.auth_controller.handle_register(name, str(validated_email), password)
+            QMessageBox.information(self, "Sucesso", "Usuário registrado com sucesso!")
+            self.screens_controller.set_screen("login")
+
         except ValueError as e:
-            QMessageBox.warning(self, "Erro", str(e))
+            QMessageBox.warning(self, "Erro", str(e))  # Exibe a mensagem de erro específica
+
+        except Exception as e:
+            QMessageBox.critical(self, "Erro", "Erro inesperado ao registrar o usuário.")
+            print(f"Erro inesperado: {e}")  # Log para depuração
 
     def handle_return_to_login(self) -> None:
         print("Tentando voltar para a tela de login...")  # Log para depuração

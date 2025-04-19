@@ -1,5 +1,6 @@
 from config.database_config import get_connection
 from models.auth.user import User
+from mysql.connector.errors import IntegrityError
 
 from typing import Optional
 
@@ -23,10 +24,19 @@ class UserRepository:
         cursor = self.conn.cursor()
         
         query = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
-        cursor.execute(query, (user.name, user.email, user.hashed_password))
-        self.conn.commit()
-        cursor.close()
-        print("Usuário criado com sucesso!")  # Log para depuração
+        try:
+            cursor.execute(query, (user.name, user.email, user.hashed_password))
+            self.conn.commit()
+            print("Usuário criado com sucesso!")  # Log para depuração
+
+        except IntegrityError as e:
+            if e.errno == 1062:  # Código de erro para duplicidade
+                raise ValueError("Esse email já está cadastrado.")
+            else:
+                raise
+
+        finally:
+            cursor.close()
 
     def get_user_by_credentials(self, email: str) -> Optional[User]:
         print(f"Buscando usuário com email: {email}")  # Log para depuração

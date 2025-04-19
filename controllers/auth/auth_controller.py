@@ -41,16 +41,20 @@ class AuthController:
         
     def handle_register(self, name: str, email: str, password: str) -> bool:
         try:
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Salt é gerado como bytes
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-            user = User(name=name, email=email, hashed_password=hashed_password.decode('utf-8'))  # Decodifica o hash para armazenar como string
+            user = User(name=name, email=email, hashed_password=hashed_password)
             self.repository.create_user(user)
 
             return True
 
-        except Exception as e:
+        except ValueError as e:
             print(f"Erro no handle_register: {e}")
-            return False
+            raise  # Propaga a exceção para a interface
+
+        except Exception as e:
+            print(f"Erro inesperado no handle_register: {e}")
+            raise  # Propaga exceções inesperadas
         
     def handle_reset_password(self, email: str) -> bool:
         try:
