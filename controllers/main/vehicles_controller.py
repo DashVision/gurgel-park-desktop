@@ -85,22 +85,33 @@ class VehiclesController:
             if not vehicle:
                 raise ValueError("Veículo não encontrado.")
 
-            # Envia o email de solicitação de compartilhamento
-            EmailService.send_vehicle_share_request(email, plate) # Para aqui
+            # Verifica se o e-mail está cadastrado no sistema
+            user = self.auth_controller.repository.get_user_by_email(email)
+            if not user:
+                raise ValueError("O e-mail fornecido não está cadastrado no sistema.")
+
+            # Verifica se o solicitante está tentando enviar para si mesmo
+            current_user_id = self.auth_controller.get_current_user_id()
+            if current_user_id == vehicle["user_id"]:
+                raise ValueError("Você não pode solicitar o compartilhamento do seu próprio veículo.")
+
+            # Envia o e-mail de solicitação de compartilhamento
+            EmailService.send_vehicle_share_request(email, plate)
 
             # Busca o usuário portador do veículo
-            owner = self.auth_controller.repository.get_user_by_id(vehicle["user_id"]) # Aqui mais ou menos
-            print(owner)
+            owner = self.auth_controller.repository.get_user_by_id(vehicle["user_id"])
             if not owner:
                 raise ValueError("Usuário portador do veículo não encontrado.")
 
             # Registra a notificação para o portador do veículo
-            message = f"O usuário {email} solicitou compartilhar o veículo {plate}."
+            message = f"O usuário {self.auth_controller.current_email} solicitou compartilhar o veículo {plate}."
             self.notification_service.add_notification(owner["id"], vehicle["id"], message)
 
             print(f"Solicitação de compartilhamento enviada para {email} e notificação registrada para o portador do veículo.")
             return "Solicitação enviada com sucesso!"
-        
-        except Exception as e:
+        except ValueError as e:
             print(f"Erro ao enviar solicitação de compartilhamento: {e}")
-            return f"Erro ao enviar solicitação: {e}"
+            return f"Erro: {e}"
+        except Exception as e:
+            print(f"Erro inesperado ao enviar solicitação de compartilhamento: {e}")
+            return "Erro inesperado ao enviar solicitação."
