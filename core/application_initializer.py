@@ -1,21 +1,26 @@
-from controllers.screens_controller import ScreensController
-from controllers.auth.auth_controller import AuthController
-from controllers.main.vehicles_controller import VehiclesController
-from repositories.main.vehicles_repository import VehiclesRepository
-from services.notifications import NotificationService
-from repositories.main.notifications_repository import NotificationsRepository
-from repositories.auth.user_repository import UserRepository
-from views.auth.login_window import LoginWindow
-from views.auth.forgot_password_window import ForgotPasswordWindow
-from views.auth.register_window import RegisterWindow
-from views.auth.new_password_window import NewPasswordWindow
-from views.auth.confirm_code_window import ConfirmCodeWindow
-from views.home.home_window import HomeWindow
-from views.home.car_register_window import CarRegisterWindow
-from views.home.notifications_window import NotificationsWindow
+from core.config.database_initializer import initialize_database  # Importa o inicializador do banco de dados
+from core.controllers.screens_controller import ScreensController
+from core.controllers.auth.auth_controller import AuthController
+from core.controllers.main.vehicles_controller import VehiclesController
+from core.repositories.main.vehicles_repository import VehiclesRepository
+from core.services.notifications import NotificationService
+from core.repositories.main.notifications_repository import NotificationsRepository
+from core.repositories.auth.user_repository import UserRepository
+from core.views.auth.login_window import LoginWindow
+from core.views.auth.forgot_password_window import ForgotPasswordWindow
+from core.views.auth.register_window import RegisterWindow
+from core.views.auth.new_password_window import NewPasswordWindow
+from core.views.auth.confirm_code_window import ConfirmCodeWindow
+from core.views.home.home_window import HomeWindow
+from core.views.home.car_register_window import CarRegisterWindow
+from core.views.home.notifications_window import NotificationsWindow
 
 def initialize_application():
     try:
+        # Inicializa o banco de dados
+        print("Inicializando o banco de dados...")
+        initialize_database()
+
         # Instancia o controlador de telas
         print("Instanciando o ScreensController...")
         screens_controller = ScreensController()

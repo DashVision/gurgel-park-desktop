@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
-from controllers.auth.auth_controller import AuthController
+from core.controllers.auth.auth_controller import AuthController
 from PyQt5.QtCore import Qt
 
 class ForgotPasswordWindow(QWidget):

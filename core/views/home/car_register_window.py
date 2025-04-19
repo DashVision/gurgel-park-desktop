@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget, QFormLayout, QLineEdit, QSpinBox, QMessageBox, QListWidget)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QShowEvent
-from controllers.auth.auth_controller import AuthController
-from controllers.screens_controller import ScreensController
+from core.controllers.auth.auth_controller import AuthController
+from core.controllers.screens_controller import ScreensController
 
 class CarRegisterWindow(QWidget):
     def __init__(self, screens_controller, auth_controller, vehicles_controller):

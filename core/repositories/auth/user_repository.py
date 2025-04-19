@@ -1,5 +1,5 @@
-from config.database_config import get_connection
-from models.auth.user import User
+from core.config.database_config import get_connection
+from core.models.auth.user import User
 from mysql.connector.errors import IntegrityError
 
 from typing import Optional

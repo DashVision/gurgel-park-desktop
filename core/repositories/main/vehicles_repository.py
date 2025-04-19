@@ -1,5 +1,5 @@
-from config.database_config import get_connection
-from models.main.vehicles import Vehicle
+from core.config.database_config import get_connection
+from core.models.main.vehicles import Vehicle
 
 from typing import Optional
 

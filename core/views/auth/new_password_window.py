@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
 from PyQt5.QtCore import Qt
 
-from controllers.auth.auth_controller import AuthController
+from core.controllers.auth.auth_controller import AuthController
 
 class NewPasswordWindow(QWidget):
     def __init__(self, screens_controller, auth_controller):

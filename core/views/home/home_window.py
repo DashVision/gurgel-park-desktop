@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QListWidgetItem, QStackedWidget, QMessageBox)
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon, QShowEvent
-from controllers.auth.auth_controller import AuthController
-from controllers.screens_controller import ScreensController
+from core.controllers.auth.auth_controller import AuthController
+from core.controllers.screens_controller import ScreensController
 
 
 class HomeWindow(QWidget):

@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
 from PyQt5.QtCore import Qt
-from controllers.auth.auth_controller import AuthController
-from controllers.screens_controller import ScreensController
-from models.auth.email import Email  # Importando a classe Email
+from core.controllers.auth.auth_controller import AuthController
+from core.controllers.screens_controller import ScreensController
+from core.models.auth.email import Email  # Importando a classe Email
 
 
 class RegisterWindow(QWidget):

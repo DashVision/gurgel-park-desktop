@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QMessageBox)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QShowEvent
+from core.controllers.auth.auth_controller import AuthController
+from core.controllers.screens_controller import ScreensController
 
 class NotificationsWindow(QWidget):
     def __init__(self, vehicles_controller, auth_controller):

@@ -1,4 +1,4 @@
-from config.database_config import get_connection
+from core.config.database_config import get_connection
 
 class NotificationsRepository:
     def __init__(self):

@@ -1,7 +1,7 @@
-from repositories.auth.user_repository import UserRepository
-from models.auth.user import User
+from core.repositories.auth.user_repository import UserRepository
+from core.models.auth.user import User
+from core.services.email_service import EmailService
 import bcrypt
-from services.email_service import EmailService
 from typing import Optional
 
 class AuthController:

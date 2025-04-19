@@ -1,8 +1,8 @@
-from repositories.main.vehicles_repository import VehiclesRepository
-from models.main.vehicles import Vehicle
-from services.email_service import EmailService
-from services.notifications import NotificationService
-from repositories.auth.user_repository import UserRepository
+from core.repositories.main.vehicles_repository import VehiclesRepository
+from core.models.main.vehicles import Vehicle
+from core.services.email_service import EmailService
+from core.services.notifications import NotificationService
+from core.repositories.auth.user_repository import UserRepository
 
 class VehiclesController:
     def __init__(self, repository, notification_repository, auth_controller, user_repository: UserRepository):
