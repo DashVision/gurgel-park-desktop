@@ -118,11 +118,8 @@ class HomeWindow(QWidget):
     def show_notifications_screen(self):
         self.screens_controller.set_screen("notifications")
 
-    def show_history_screen(self):
-        QMessageBox.information(self, "Histórico", "Tela de Histórico em desenvolvimento.")
-
     def show_settings_screen(self):
-        QMessageBox.information(self, "Configurações", "Tela de Configurações em desenvolvimento.")
+        self.screens_controller.set_screen("settings")
 
     def handle_logout(self):
         self.auth_controller.logout()

@@ -93,6 +93,28 @@ class UserRepository:
 
         print("Senha atualizada com sucesso!")  # Log para depuração
 
+    def update_user_password_with_id(self, user_id: int, hashed_password: str) -> None:
+        print(f"Atualizando senha para o ID: {user_id}")  # Log para depuração
+        cursor = self.conn.cursor()
+
+        query = "UPDATE users SET password = %s WHERE id = %s"
+        cursor.execute(query, (hashed_password, user_id))
+        self.conn.commit()
+        cursor.close()
+
+        print("Senha atualizada com sucesso!")  # Log para depuração
+
+    def update_user_email(self, user_id: int, new_email: str) -> None:
+        print(f"Atualizando email para o ID: {user_id}")
+        cursor = self.conn.cursor()
+
+        query = "UPDATE users SET email = %s WHERE id = %s"
+        cursor.execute(query, (new_email, user_id))
+        self.conn.commit()
+        cursor.close()
+
+        print("Email atualizado com sucesso!") # Log para depuração
+
     def get_user_by_id(self, user_id):
         """Obtém um usuário pelo ID."""
         try:
@@ -112,4 +134,3 @@ class UserRepository:
         except Exception as e:
             print(f"Erro ao buscar usuário por ID: {e}")
             raise
-

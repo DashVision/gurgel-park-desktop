@@ -14,6 +14,7 @@ from core.views.auth.confirm_code_window import ConfirmCodeWindow
 from core.views.home.home_window import HomeWindow
 from core.views.home.car_register_window import CarRegisterWindow
 from core.views.home.notifications_window import NotificationsWindow
+from core.views.home.settings_window import SettingsWindow
 
 def initialize_application():
     try:
@@ -55,7 +56,8 @@ def initialize_application():
         new_password_window = NewPasswordWindow(screens_controller, auth_controller)
         confirm_code_window = ConfirmCodeWindow(screens_controller, auth_controller)
         home_window = HomeWindow(screens_controller, auth_controller, vehicles_controller)
-        notifications_window = NotificationsWindow(vehicles_controller, auth_controller)
+        notifications_window = NotificationsWindow(vehicles_controller, auth_controller, screens_controller)
+        settings_window = SettingsWindow(screens_controller, auth_controller)
 
         screens_controller.add_screen("login", login_window)
         screens_controller.add_screen("forgot_password", forgot_password_window)
@@ -65,6 +67,7 @@ def initialize_application():
         screens_controller.add_screen("home", home_window)
         screens_controller.add_screen("car_register", CarRegisterWindow(screens_controller, auth_controller, vehicles_controller))
         screens_controller.add_screen("notifications", notifications_window)
+        screens_controller.add_screen("settings", settings_window)
 
         screens_controller.auth_controller = auth_controller
 

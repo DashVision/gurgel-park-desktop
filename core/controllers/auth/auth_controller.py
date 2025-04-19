@@ -107,6 +107,16 @@ class AuthController:
             print(f"Erro no update_password: {e}")
             return False
         
+    def update_password_with_id(self, user_id: int, new_password: str) -> bool:
+        try:
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            UserRepository().update_user_password_with_id(user_id, hashed_password.decode('utf-8'))
+            return True
+        
+        except Exception as e:
+            print(f"Erro no update_password_with_id: {e}")
+            return False
+        
     def get_current_user_id(self) -> Optional[int]:
         if self.current_user:
             print(f"get_current_user_id: Usuário atual: {self.current_user}")
