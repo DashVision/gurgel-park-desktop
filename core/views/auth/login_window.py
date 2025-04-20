@@ -60,9 +60,12 @@ class LoginWindow(QWidget):
             return
 
         if self.auth_controller.handle_login(email, password):
+            user_type = self.auth_controller.get_current_user_type()
+            if user_type == "cliente":
+                self.screens_controller.set_screen("home")
+            elif user_type == "estabelecimento":
+                self.screens_controller.set_screen("establishment_home")
             QMessageBox.information(self, "Login", "Login realizado com sucesso!")
-            self.screens_controller.set_screen("home")
-
         else:
             QMessageBox.warning(self, "Erro", "Credenciais inválidas!")
             print("Credenciais inválidas!")

@@ -29,23 +29,33 @@ class AuthController:
 
     def handle_login(self, email: str, password: str) -> bool:
         try:
+            # Recupera o usuário pelo email
             user = self.repository.get_user_by_email(email)
-            if user and bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+            if not user:
+                print(f"Usuário com email '{email}' não encontrado.")  # Log para depuração
+                return False
+
+            print(f"Usuário encontrado: {user.email}")  # Log para depuração
+
+            # Verifica a senha
+            if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+                print("Senha válida!")  # Log para depuração
                 self.current_email = user.email
-                self.current_user = user  # Certifique-se de que o campo `id` está preenchido
-                print(f"Usuário logado: {self.current_user}")  # Log para depuração
+                self.current_user = user
                 return True
-            print("Credenciais inválidas.")  # Log para depuração
-            return False
+            else:
+                print("Senha inválida!")  # Log para depuração
+                return False
+
         except Exception as e:
             print(f"Erro no handle_login: {e}")
             return False
         
-    def handle_register(self, name: str, email: str, password: str) -> bool:
+    def handle_register(self, name: str, email: str, password: str, user_type: str) -> bool:
         try:
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-            user = User(name=name, email=email, hashed_password=hashed_password)
+            user = User(name=name, email=email, hashed_password=hashed_password, user_type=user_type)
             self.repository.create_user(user)
 
             return True
@@ -99,8 +109,8 @@ class AuthController:
         
     def update_password(self, email: str, new_password: str) -> bool:
         try:
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-            self.repository.update_user_password(email, hashed_password.decode('utf-8'))
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            self.repository.update_user_password(email, hashed_password)
             return True
         
         except Exception as e:
@@ -109,8 +119,8 @@ class AuthController:
         
     def update_password_with_id(self, user_id: int, new_password: str) -> bool:
         try:
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-            UserRepository().update_user_password_with_id(user_id, hashed_password.decode('utf-8'))
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            UserRepository().update_user_password_with_id(user_id, hashed_password)
             return True
         
         except Exception as e:
@@ -123,3 +133,19 @@ class AuthController:
             return self.current_user.id
         print("get_current_user_id: Nenhum usuário está logado.")
         return None
+
+    def get_current_user_type(self) -> Optional[str]:
+        if self.current_user:
+            return self.current_user.user_type
+        return None
+
+    def delete_account(self, user_id: int) -> bool:
+        """Exclui a conta do usuário."""
+        try:
+            self.repository.delete_user(user_id)
+            self.logout()  # Desloga o usuário após a exclusão
+            print(f"Conta do usuário com ID {user_id} excluída com sucesso.")  # Log para depuração
+            return True
+        except Exception as e:
+            print(f"Erro ao excluir conta: {e}")
+            return False

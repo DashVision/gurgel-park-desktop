@@ -23,9 +23,9 @@ class UserRepository:
         print(f"Criando usuário: {user}")  # Log para depuração
         cursor = self.conn.cursor()
         
-        query = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
+        query = "INSERT INTO users (name, email, password, user_type) VALUES (%s, %s, %s, %s)"
         try:
-            cursor.execute(query, (user.name, user.email, user.hashed_password))
+            cursor.execute(query, (user.name, user.email, user.hashed_password, user.user_type))
             self.conn.commit()
             print("Usuário criado com sucesso!")  # Log para depuração
 
@@ -63,9 +63,8 @@ class UserRepository:
     def get_user_by_email(self, email: str) -> Optional[User]:
         print(f"Buscando usuário com email: {email}")  # Log para depuração
         cursor = self.conn.cursor()
-        query = "SELECT id, name, email, password FROM users WHERE email = %s"
+        query = "SELECT id, name, email, password, user_type FROM users WHERE email = %s"
         cursor.execute(query, (email,))
-
         row = cursor.fetchone()
         cursor.close()
 
@@ -75,7 +74,8 @@ class UserRepository:
                 id=row[0],
                 name=row[1],
                 email=row[2],
-                hashed_password=row[3]  # Retorna o hash armazenado
+                hashed_password=row[3],  # Certifique-se de que o hash está correto
+                user_type=row[4]
             )
             return user
 
@@ -134,3 +134,18 @@ class UserRepository:
         except Exception as e:
             print(f"Erro ao buscar usuário por ID: {e}")
             raise
+
+    def delete_user(self, user_id: int) -> None:
+        """Exclui um usuário pelo ID."""
+        print(f"Deletando usuário com ID: {user_id}")  # Log para depuração
+        try:
+            cursor = self.conn.cursor()
+            query = "DELETE FROM users WHERE id = %s"
+            cursor.execute(query, (user_id,))
+            self.conn.commit()
+            print("Usuário deletado com sucesso!")  # Log para depuração
+        except Exception as e:
+            print(f"Erro ao deletar usuário: {e}")
+            raise
+        finally:
+            cursor.close()

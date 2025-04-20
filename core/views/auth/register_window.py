@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox, QComboBox)
 from PyQt5.QtCore import Qt
 from core.controllers.auth.auth_controller import AuthController
 from core.controllers.screens_controller import ScreensController
@@ -32,6 +32,12 @@ class RegisterWindow(QWidget):
         self.password_input.setPlaceholderText("Senha")
         self.password_input.setEchoMode(QLineEdit.Password)
 
+        # Adicione um campo para selecionar o tipo de usuário
+        self.user_type_combo = QComboBox()
+        self.user_type_combo.addItems(["cliente", "estabelecimento"])
+        layout.addWidget(QLabel("Tipo de Usuário:"))
+        layout.addWidget(self.user_type_combo)
+
         # Botão para registrar nova conta
         self.register_new_user_btn = QPushButton("Registrar nova conta")
         self.register_new_user_btn.clicked.connect(self.handle_register_new_user)
@@ -55,6 +61,7 @@ class RegisterWindow(QWidget):
         name = self.name_input.text().strip()
         email = self.email_input.text().strip()
         password = self.password_input.text().strip()
+        user_type = self.user_type_combo.currentText()
 
         # Valida os campos
         if not name or not email or not password:
@@ -64,7 +71,7 @@ class RegisterWindow(QWidget):
         try:
             # Valida o email e tenta registrar o usuário
             validated_email = Email(email)
-            self.auth_controller.handle_register(name, str(validated_email), password)
+            self.auth_controller.handle_register(name, str(validated_email), password, user_type)
             QMessageBox.information(self, "Sucesso", "Usuário registrado com sucesso!")
             self.screens_controller.set_screen("login")
 

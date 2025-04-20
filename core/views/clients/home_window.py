@@ -73,6 +73,24 @@ class HomeWindow(QWidget):
         self.setLayout(self.main_layout)
 
     def populate_menu(self):
+        user_type = self.auth_controller.get_current_user_type()
+
+        if user_type == "cliente":
+            self.menu_items = [
+                {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
+                {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
+                {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
+                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
+                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+            ]
+        elif user_type == "estabelecimento":
+            self.menu_items = [
+                {"text": "Gerenciar Estabelecimento", "icon": "building-icon.png", "action": self.show_establishment_screen},
+                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
+                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+            ]
+
+        self.menu_list.clear()
         for item in self.menu_items:
             list_item = QListWidgetItem(QIcon(item["icon"]), item["text"])
             self.menu_list.addItem(list_item)

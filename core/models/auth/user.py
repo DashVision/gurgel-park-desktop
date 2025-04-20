@@ -11,6 +11,7 @@ class User(BaseModel):
     is_active: bool = True
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    user_type: str
 
     class Config:
         from_attributes = True
