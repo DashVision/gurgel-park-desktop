@@ -205,21 +205,22 @@ class HomeWindow(QWidget):
         try:
             vehicles = self.vehicles_controller.get_user_vehicles(user_id)
             for vehicle in vehicles:
-                activites.append(f"Veículo: {vehicle['name']} cadastrado à {self.time_since(vehicle.created_at)}")
-
+                activites.append(f"Veículo {vehicle.plate} adicionado há {self.time_since(vehicle.created_at)}.")
+                print(f"Veículo: {vehicle.plate}, Criado em: {vehicle.created_at}")
+    
             notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
             for notification in notifications:
-                activites.append(f"Notificação: {notification['message']} recebida à {self.time_since(notification.created_at)}")
+                activites.append(f"Notificação: {notification['message']} recebida há {self.time_since(notification['created_at'])}.")
 
             if not activites:
                 activites.append("Nenhuma atividade recente encontrada.")
-
+        
         except Exception as e:
-            print(f"Erro ao carregar atividades recentes {e}")
+            print(f"Erro ao carregar atividades recentes: {e}")
             activites.append("Erro ao carregar atividades recentes.")
 
         return activites
-    
+
     def time_since(self, past_time):
         now = datetime.now()
         delta = now - past_time
