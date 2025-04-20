@@ -1,12 +1,12 @@
 CREATE DATABASE gurgelpark_db;
 USE gurgelpark_db;
 
--- Tabela de usuários
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    user_type ENUM('cliente', 'estabelecimento') DEFAULT 'cliente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,3 +43,4 @@ CREATE TABLE vehicle_users (
 
 SELECT * FROM users;
 INSERT INTO users (name, email, password) values ("admin@", "admin@", "admin@")
+ALTER TABLE users ADD COLUMN user_type ENUM('cliente', 'estabelecimento') DEFAULT 'cliente';
