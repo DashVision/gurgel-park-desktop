@@ -1,5 +1,6 @@
 from core.config.database_config import get_connection
 from core.models.main.vehicles import Vehicle
+from datetime import datetime
 
 from typing import Optional
 
@@ -82,7 +83,7 @@ class VehiclesRepository:
     def get_vehicles_by_user_id(self, user_id: int) -> list[Vehicle]:
         cursor = self.conn.cursor()
         query = """
-            SELECT id, placa, marca, modelo, ano, cor
+            SELECT id, placa, marca, modelo, ano, cor, created_at
             FROM vehicles
             WHERE user_id = %s
         """
@@ -98,7 +99,8 @@ class VehiclesRepository:
                 brand=row[2],
                 model=row[3],
                 year=row[4],
-                color=row[5]
+                color=row[5],
+                created_at=row[6] if isinstance(row[6], datetime) else datetime.strptime(row[6], "%Y-%m-%d %H:%M:%S")
             ))
         return vehicles
     

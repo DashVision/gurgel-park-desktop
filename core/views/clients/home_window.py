@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QListWidgetItem, QStackedWidget, QMessageBox)
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon, QShowEvent
+from datetime import datetime
 from core.controllers.auth.auth_controller import AuthController
 from core.controllers.screens_controller import ScreensController
 
@@ -107,9 +108,12 @@ class HomeWindow(QWidget):
         title.setAlignment(Qt.AlignCenter)
         dashboard_layout.addWidget(title)
 
-        recent_activities = QLabel("Aqui serão exibidas as atividades recentes do usuário.")
-        recent_activities.setAlignment(Qt.AlignCenter)
-        dashboard_layout.addWidget(recent_activities)
+        activites = self.get_recent_activites()
+
+        for activity in activites:
+            activity_label = QLabel(activity)
+            activity_label.setAlignment(Qt.AlignLeft)
+            dashboard_layout.addWidget(activity_label)
 
         dashboard_widget = QWidget()
         dashboard_widget.setLayout(dashboard_layout)
@@ -180,5 +184,56 @@ class HomeWindow(QWidget):
         super().showEvent(event)
         if not self.auth_controller.is_logged_in():
             return  # Sai do método se o usuário não estiver logado
+        
+        self.content_stack.removeWidget(self.dashboard_screen)
+        self.dashboard_screen = self.create_dashboard_screen()
+        self.content_stack.addWidget(self.dashboard_screen)
+        self.content_stack.setCurrentWidget(self.dashboard_screen)
 
         self.check_notifications()
+
+    def get_recent_activites(self):
+        activites = []
+
+        if not self.auth_controller.is_logged_in():
+            return ["Por favor, faça login para visualizar suas atividades."]
+        
+        user_id = self.auth_controller.get_current_user_id()
+        if not user_id:
+            return ["Erro ao recuperar o ID do usuário para carregar atividades."]
+        
+        try:
+            vehicles = self.vehicles_controller.get_user_vehicles(user_id)
+            for vehicle in vehicles:
+                activites.append(f"Veículo: {vehicle['name']} cadastrado à {self.time_since(vehicle.created_at)}")
+
+            notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
+            for notification in notifications:
+                activites.append(f"Notificação: {notification['message']} recebida à {self.time_since(notification.created_at)}")
+
+            if not activites:
+                activites.append("Nenhuma atividade recente encontrada.")
+
+        except Exception as e:
+            print(f"Erro ao carregar atividades recentes {e}")
+            activites.append("Erro ao carregar atividades recentes.")
+
+        return activites
+    
+    def time_since(self, past_time):
+        now = datetime.now()
+        delta = now - past_time
+
+        if delta.days > 0:
+            return f"{delta.days} dias"
+        
+        elif delta.seconds > 3600:
+            hours = delta.seconds // 3600
+            return f"{hours} horas"
+        
+        elif delta.seconds > 60:
+            minutes = delta.seconds // 60
+            return f"{minutes} minutos"
+        
+        else:
+            return f"{delta.seconds} segundos"
