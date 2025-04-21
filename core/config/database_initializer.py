@@ -73,6 +73,49 @@ def initialize_database():
         """)
         print("Tabela 'vehicle_users' verificada/criada com sucesso.")
 
+        # Cria a tabela de estabelecimentos
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS establishments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            cnpj VARCHAR(14) NOT NULL UNIQUE,
+            address TEXT NOT NULL,
+            user_id INT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+        """)
+        print("Tabela 'establishments' verificada/criada com sucesso.")
+
+        # Cria a tabela de configurações de estacionamento
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS parking_configurations (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            establishment_id INT NOT NULL,
+            rows INT NOT NULL,
+            columns INT NOT NULL,
+            spot_type ENUM('Normal', 'Preferencial', 'Reservada') NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (establishment_id) REFERENCES establishments(id) ON DELETE CASCADE
+        );
+        """)
+        print("Tabela 'parking_configurations' verificada/criada com sucesso.")
+
+        # Cria a tabela de vagas ocupadas
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS occupied_spots (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            parking_configuration_id INT NOT NULL,
+            user_id INT NOT NULL,
+            spot_number INT NOT NULL,
+            reserved_until TIMESTAMP NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (parking_configuration_id) REFERENCES parking_configurations(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+        """)
+        print("Tabela 'occupied_spots' verificada/criada com sucesso.")
+
         # Fecha a conexão
         cursor.close()
         conn.close()

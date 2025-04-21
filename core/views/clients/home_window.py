@@ -135,7 +135,7 @@ class HomeWindow(QWidget):
         self.screens_controller.set_screen("car_register")
 
     def show_status_screen(self):
-        QMessageBox.information(self, "Status das Vagas", "Tela de Status das Vagas em desenvolvimento.")
+        self.screens_controller.set_screen("status")
     
     def show_notifications_screen(self):
         self.screens_controller.set_screen("notifications")

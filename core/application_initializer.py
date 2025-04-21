@@ -15,7 +15,18 @@ from core.views.clients.home_window import HomeWindow
 from core.views.clients.car_register_window import CarRegisterWindow
 from core.views.clients.notifications_window import NotificationsWindow
 from core.views.clients.settings_window import SettingsWindow
+from core.views.clients.park_status_window import StatusWindow
+from core.controllers.main.establishments_controller import EstablishmentsController
+from core.repositories.main.establishments_repository import EstablishmentsRepository
 from core.views.establishments.estabilishment_home_window import EstablishmentHomeWindow
+from core.views.establishments.establishment_control_window import EstablishmentControlWindow
+from core.views.establishments.establishment_register_window import EstablishmentRegisterWindow
+from core.views.establishments.establishment_benefits_window import EstablishmentBenefitsWindow
+from core.views.establishments.establishment_parking_control_window import EstablishmentParkingControl
+from core.views.establishments.establishment_park_window import EstablishmentPark
+from core.repositories.main.parking_repository import ParkingRepository
+from core.controllers.main.parking_controller import ParkingController
+
 
 def initialize_application():
     try:
@@ -30,6 +41,19 @@ def initialize_application():
         # Instancia o AuthController compartilhado
         print("Instanciando o AuthController...")
         auth_controller = AuthController()
+
+        # Atribui o auth_controller ao screens_controller
+        screens_controller.auth_controller = auth_controller
+
+        # Instancia o EstablishmentsController
+        print("Instanciando o EstablishmentsController...")
+        establishments_repository = EstablishmentsRepository()
+        establishments_controller = EstablishmentsController(establishments_repository)
+
+        # Instancia o ParkingController
+        print("Instanciando o ParkingController...")
+        parking_repository = ParkingRepository()
+        parking_controller = ParkingController(parking_repository)
 
         # Instancia os repositórios
         print("Instanciando os repositórios...")
@@ -59,8 +83,14 @@ def initialize_application():
         home_window = HomeWindow(screens_controller, auth_controller, vehicles_controller)
         notifications_window = NotificationsWindow(vehicles_controller, auth_controller, screens_controller)
         settings_window = SettingsWindow(screens_controller, auth_controller)
+        status_window = StatusWindow(screens_controller, parking_controller)
 
         estabilishment_home_window = EstablishmentHomeWindow(screens_controller, auth_controller)
+        estabilishment_control_window = EstablishmentControlWindow(screens_controller)
+        estabilishment_register_window = EstablishmentRegisterWindow(screens_controller, establishments_controller)
+        establishment_benefits_window = EstablishmentBenefitsWindow(screens_controller)
+        establishment_parking_control_window = EstablishmentParkingControl(screens_controller, parking_controller)
+        establishment_park_window = EstablishmentPark(screens_controller, parking_controller)
 
         screens_controller.add_screen("login", login_window)
         screens_controller.add_screen("forgot_password", forgot_password_window)
@@ -72,8 +102,12 @@ def initialize_application():
         screens_controller.add_screen("notifications", notifications_window)
         screens_controller.add_screen("settings", settings_window)
         screens_controller.add_screen("establishment_home", estabilishment_home_window)
-
-        screens_controller.auth_controller = auth_controller
+        screens_controller.add_screen("establishment_control", estabilishment_control_window)
+        screens_controller.add_screen("establishment_register", estabilishment_register_window)
+        screens_controller.add_screen("establishment_benefits", establishment_benefits_window)
+        screens_controller.add_screen("parking_control", establishment_parking_control_window)
+        screens_controller.add_screen("establishment_park", establishment_park_window)
+        screens_controller.add_screen("status", status_window)
 
         return screens_controller
 

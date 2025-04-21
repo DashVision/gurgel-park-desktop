@@ -120,7 +120,7 @@ class EstablishmentHomeWindow(QWidget):
         self.screens_controller.set_screen("establishment_control")
 
     def show_parking_screen(self):
-        self.screens_controller.set_screen("parking")
+        self.screens_controller.set_screen("parking_control")
 
     def show_settings_screen(self):
         self.screens_controller.set_screen("settings")
