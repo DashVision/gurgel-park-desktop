@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QSpinBox, QComboBox, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QSpinBox, QComboBox, QPushButton, QMessageBox, QHBoxLayout
 
 class EstablishmentPark(QWidget):
     def __init__(self, screens_controller, parking_controller):
@@ -29,11 +29,17 @@ class EstablishmentPark(QWidget):
         form_layout.addRow("Colunas:", self.columns_input)
         form_layout.addRow("Tipo de Vaga:", self.spot_type_input)
 
+        button_layout = QHBoxLayout()
         self.save_button = QPushButton("Salvar Configuração")
         self.save_button.clicked.connect(self.save_parking_configuration)
+        button_layout.addWidget(self.save_button)
+
+        self.back_button = QPushButton("Voltar")
+        self.back_button.clicked.connect(self.handle_back)
+        button_layout.addWidget(self.back_button)
 
         layout.addLayout(form_layout)
-        layout.addWidget(self.save_button)
+        layout.addLayout(button_layout)
         self.setLayout(layout)
 
     def save_parking_configuration(self):
@@ -41,10 +47,18 @@ class EstablishmentPark(QWidget):
         columns = self.columns_input.value()
         spot_type = self.spot_type_input.currentText()
 
-        establishment_id = self.screens_controller.auth_controller.get_current_user_id()
+        user_id = self.screens_controller.auth_controller.get_current_user_id()
+        establishment = self.screens_controller.establishments_controller.get_establishment_by_user(user_id)
+        if not establishment:
+            QMessageBox.warning(self, "Estabelecimento não encontrado", "Cadastre um estabelecimento antes de configurar o estacionamento.")
+            return
+        establishment_id = establishment["id"]
 
         try:
             self.parking_controller.save_parking_configuration(establishment_id, rows, columns, spot_type)
             QMessageBox.information(self, "Sucesso", "Configuração salva com sucesso!")
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao salvar configuração: {str(e)}")
+
+    def handle_back(self):
+        self.screens_controller.set_screen("establishment_home")

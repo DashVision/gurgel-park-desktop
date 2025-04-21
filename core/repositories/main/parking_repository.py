@@ -8,7 +8,7 @@ class ParkingRepository:
         """Cria uma configuração de estacionamento."""
         cursor = self.conn.cursor()
         query = """
-            INSERT INTO parking_configurations (establishment_id, rows, columns, spot_type)
+            INSERT INTO parking_configurations (establishment_id, `rows`, `columns`, spot_type)
             VALUES (%s, %s, %s, %s)
         """
         cursor.execute(query, (establishment_id, rows, columns, spot_type))

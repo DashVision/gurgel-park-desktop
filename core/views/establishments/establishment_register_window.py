@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout
 
 class EstablishmentRegisterWindow(QWidget):
     def __init__(self, screens_controller, establishments_controller):
@@ -28,8 +28,15 @@ class EstablishmentRegisterWindow(QWidget):
         self.register_button = QPushButton("Cadastrar")
         self.register_button.clicked.connect(self.register_establishment)
 
+        self.back_button = QPushButton("Voltar")
+        self.back_button.clicked.connect(self.handle_back)
+
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.register_button)
+        button_layout.addWidget(self.back_button)
+
         layout.addLayout(form_layout)
-        layout.addWidget(self.register_button)
+        layout.addLayout(button_layout)
         self.setLayout(layout)
 
     def register_establishment(self):
@@ -42,8 +49,12 @@ class EstablishmentRegisterWindow(QWidget):
             return
 
         try:
-            self.establishments_controller.register_establishment(name, cnpj, address)
+            user_id = self.screens_controller.auth_controller.get_current_user_id()
+            self.establishments_controller.register_establishment(name, cnpj, address, user_id)
             QMessageBox.information(self, "Sucesso", "Estabelecimento cadastrado com sucesso!")
             self.screens_controller.set_screen("establishment_home")
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao cadastrar estabelecimento: {str(e)}")
+
+    def handle_back(self):
+        self.screens_controller.set_screen("establishment_home")
