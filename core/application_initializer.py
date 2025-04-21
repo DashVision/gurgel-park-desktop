@@ -1,4 +1,5 @@
 from core.config.database_initializer import initialize_database  # Importa o inicializador do banco de dados
+from core.config.database_config import get_connection
 from core.controllers.screens_controller import ScreensController
 from core.controllers.auth.auth_controller import AuthController
 from core.controllers.main.vehicles_controller import VehiclesController

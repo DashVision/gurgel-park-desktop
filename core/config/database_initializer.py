@@ -1,5 +1,5 @@
 from mysql.connector import connect, Error
-from database_config import get_connection
+from core.config.database_config import get_connection
 
 def initialize_database():
     try:
