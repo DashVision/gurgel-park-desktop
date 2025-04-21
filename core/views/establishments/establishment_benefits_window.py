@@ -76,6 +76,9 @@ class EstablishmentBenefitsWindow(QWidget):
         self.benefits_list = QListWidget()
         self.benefits_list.itemDoubleClicked.connect(self.handle_edit_benefit)
         list_layout.addWidget(self.benefits_list)
+        self.delete_button = QPushButton("Excluir Benefício")
+        self.delete_button.clicked.connect(self.handle_delete_benefit)
+        list_layout.addWidget(self.delete_button)
         
         list_section.setLayout(list_layout)
 
@@ -148,5 +151,45 @@ class EstablishmentBenefitsWindow(QWidget):
         self.screens_controller.set_screen("establishment_home")
 
     def handle_edit_benefit(self, item):
-        # Placeholder: abrir tela de edição do benefício
-        QMessageBox.information(self, "Editar Benefício", f"Editar benefício: {item.text()}")
+        # Preenche o formulário para edição
+        benefit = self._find_benefit_by_list_item(item)
+        if benefit:
+            self.name_input.setText(benefit["name"])
+            self.description_input.setText(benefit["description"])
+            self.discount_input.setValue(benefit["discount_value"])
+            self.min_hours_input.setValue(benefit["min_hours"])
+            self.editing_benefit_id = benefit["id"]
+        else:
+            QMessageBox.warning(self, "Erro", "Não foi possível encontrar os dados do benefício para edição.")
+
+    def handle_delete_benefit(self):
+        selected_item = self.benefits_list.currentItem()
+        if not selected_item:
+            QMessageBox.warning(self, "Erro", "Selecione um benefício para excluir.")
+            return
+        benefit = self._find_benefit_by_list_item(selected_item)
+        if not benefit:
+            QMessageBox.warning(self, "Erro", "Não foi possível encontrar os dados do benefício para exclusão.")
+            return
+        confirm = QMessageBox.question(self, "Excluir Benefício", f"Tem certeza que deseja excluir o benefício '{benefit['name']}'?", QMessageBox.Yes | QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            try:
+                self.benefits_controller.delete_benefit(benefit["id"])
+                QMessageBox.information(self, "Sucesso", "Benefício excluído com sucesso!")
+                self.clear_form()
+                self.load_benefits()
+            except Exception as e:
+                QMessageBox.critical(self, "Erro", f"Erro ao excluir benefício: {str(e)}")
+
+    def _find_benefit_by_list_item(self, item):
+        # Busca o benefício pelo texto do item
+        user_id = self.screens_controller.auth_controller.get_current_user_id()
+        establishment = self.establishments_controller.get_establishment_by_user(user_id)
+        if not establishment:
+            return None
+        benefits = self.benefits_controller.get_benefits_by_establishment(establishment["id"])
+        for benefit in benefits:
+            display_text = f"{benefit['name']} - {benefit['discount_value']}% (mín. {benefit['min_hours']}h)"
+            if item.text() == display_text:
+                return benefit
+        return None

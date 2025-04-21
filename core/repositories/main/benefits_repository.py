@@ -1,6 +1,13 @@
 from core.config.database_config import get_connection
 
 class BenefitsRepository:
+    def delete_benefit(self, benefit_id):
+        cursor = self.conn.cursor()
+        query = "DELETE FROM benefits WHERE id = %s"
+        cursor.execute(query, (benefit_id,))
+        self.conn.commit()
+        cursor.close()
+
     def __init__(self):
         self.conn = get_connection()
 

@@ -59,14 +59,7 @@ class EstablishmentParkingControl(QWidget):
         if not establishment:
             self.title.setText("Cadastre um estabelecimento para visualizar as vagas.")
             return
-        # Botão de editar estabelecimento
-        if not hasattr(self, 'edit_button'):
-            from core.views.establishments.establishment_edit_window import EstablishmentEditWindow
-            self.edit_button = QPushButton("Editar Informações do Estabelecimento")
-            self.edit_button.clicked.connect(lambda: self.open_edit_window(establishment))
-            self.layout().insertWidget(1, self.edit_button)
-        else:
-            self.edit_button.show()
+
         configs = self.parking_controller.get_parking_configurations(establishment["id"])
         if not configs:
             self.title.setText("Configure o estacionamento para visualizar as vagas.")

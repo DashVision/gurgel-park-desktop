@@ -1,6 +1,9 @@
 from core.repositories.main.benefits_repository import BenefitsRepository
 
 class BenefitsController:
+    def delete_benefit(self, benefit_id):
+        self.repository.delete_benefit(benefit_id)
+
     def __init__(self, repository: BenefitsRepository):
         self.repository = repository
 
