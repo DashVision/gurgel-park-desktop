@@ -1,5 +1,5 @@
 from mysql.connector import connect, Error
-from core.config.database_config import get_connection
+from database_config import get_connection
 
 def initialize_database():
     try:
@@ -92,8 +92,8 @@ def initialize_database():
         CREATE TABLE IF NOT EXISTS parking_configurations (
             id INT AUTO_INCREMENT PRIMARY KEY,
             establishment_id INT NOT NULL,
-            rows INT NOT NULL,
-            columns INT NOT NULL,
+            `rows` INT NOT NULL,
+            `columns` INT NOT NULL,
             spot_type ENUM('Normal', 'Preferencial', 'Reservada') NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (establishment_id) REFERENCES establishments(id) ON DELETE CASCADE
