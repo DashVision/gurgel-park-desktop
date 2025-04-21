@@ -167,4 +167,11 @@ class SettingsWindow(QWidget):
             QMessageBox.information(self, "Conta Excluída", "Sua conta foi excluída com sucesso.")
 
     def go_to_home(self):
-        self.screens_controller.set_screen("home")
+        user_type = self.auth_controller.get_current_user_type()
+        if user_type == "cliente":
+            self.screens_controller.set_screen("home")
+        elif user_type == "estabelecimento":
+            self.screens_controller.set_screen("establishment_home")
+        else:
+            QMessageBox.warning(self, "Erro", "Tipo de usuário desconhecido. Redirecionando para login.")
+            self.screens_controller.set_screen("login")
