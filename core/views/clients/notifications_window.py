@@ -1,5 +1,7 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QMessageBox, QPushButton)
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (
+    QWidget, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QMessageBox, QPushButton
+)
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QShowEvent
 from core.controllers.auth.auth_controller import AuthController
 from core.controllers.screens_controller import ScreensController
@@ -11,6 +13,9 @@ class NotificationsWindow(QWidget):
         self.auth_controller = auth_controller
         self.screens_controller = screens_controller
         self.init_ui()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.load_notifications)
+        self.timer.start(15000)  # Atualiza notificações a cada 15s
 
     def init_ui(self):
         self.setWindowTitle("Notificações")
@@ -41,27 +46,13 @@ class NotificationsWindow(QWidget):
             return
 
         user_id = self.auth_controller.get_current_user_id()
-        if not user_id:
-            print("load_notifications: ID do usuário não encontrado. Ignorando.")
+        notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
+        if not notifications:
+            self.notifications_list.addItem("Nenhuma notificação.")
             return
-
-        try:
-            notifications = self.vehicles_controller.notification_service.get_notifications(user_id)
-            if not notifications:
-                self.notifications_list.addItem("Nenhuma notificação disponível.")
-                return
-
-            for notification in notifications:
-                item = QListWidgetItem(notification["message"])
-                self.notifications_list.addItem(item)
-
-        except Exception as e:
-            print(f"Erro ao carregar notificações: {e}")
-
-    def showEvent(self, event: QShowEvent):
-        """Carrega notificações quando a tela for exibida."""
-        super().showEvent(event)
-        self.load_notifications()
+        for notif in notifications:
+            item = QListWidgetItem(f"{notif['message']}\nRecebida em: {notif['created_at']}")
+            self.notifications_list.addItem(item)
 
     def go_to_home(self):
         self.screens_controller.set_screen("home")

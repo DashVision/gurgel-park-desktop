@@ -13,7 +13,7 @@ class EstablishmentControlWindow(QWidget):
         self.main_layout = QVBoxLayout()
         self.menu_list = QListWidget()
         self.menu_items = [
-            {"text": "Cadastro do estabelecimento", "action": self.show_establishment_registration_screen},
+            {"text": "Editar informações do estabelecimento", "action": self.show_edit_establishment_screen},
             {"text": "Gerenciar meu estacionamento", "action": self.show_manage_parking_screen},
             {"text": "Gerenciar benefícios", "action": self.show_manage_benefits_screen},
             {"text": "Voltar para Home", "action": self.handle_return_to_home}
@@ -38,9 +38,9 @@ class EstablishmentControlWindow(QWidget):
             if menu_item["text"] == item.text() and menu_item["action"]:
                 menu_item["action"]()
 
-    def show_establishment_registration_screen(self):
-        """Navega para a tela de cadastro do estabelecimento."""
-        self.screens_controller.set_screen("establishment_register")
+    def show_edit_establishment_screen(self):
+        """Navega diretamente para a tela de edição das informações do estabelecimento."""
+        self.screens_controller.set_screen("establishment_edit")
 
     def show_manage_parking_screen(self):
         """Navega para a tela de gerenciamento de estacionamento."""

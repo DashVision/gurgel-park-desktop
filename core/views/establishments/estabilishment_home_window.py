@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QStackedWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QPushButton, QGroupBox, QStackedWidget, QMessageBox
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon
 
@@ -34,16 +34,43 @@ class EstablishmentHomeWindow(QWidget):
         self.content_layout = QHBoxLayout()
 
         self.sidebar_layout = QVBoxLayout()
-        self.menu_list = QListWidget()  
-        self.menu_items = [
-            {"text": "Gerenciar meu estabelecimento", "icon": "car-icon.png", "action": self.show_establishment_control_screen},
-            {"text": "Gerenciar status das vagas", "icon": "calendar-icon.png", "action": self.show_parking_screen},
-            {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-            {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
-        ]
 
-        self.populate_menu()
-        self.sidebar_layout.addWidget(self.menu_list)
+        # Sidebar com seções em grupos
+        # Seção de Cadastro
+        cadastro_group = QGroupBox("Cadastro")
+        cadastro_layout = QVBoxLayout()
+        btn_cadastrar = QPushButton("Cadastrar Estabelecimento")
+        btn_cadastrar.clicked.connect(self.show_establishment_registration_screen)
+        btn_cadastrar_estacionamento = QPushButton("Cadastrar Estacionamento")
+        btn_cadastrar_estacionamento.clicked.connect(self.show_park_registration_screen)
+        cadastro_layout.addWidget(btn_cadastrar)
+        cadastro_layout.addWidget(btn_cadastrar_estacionamento)
+        cadastro_group.setLayout(cadastro_layout)
+        self.sidebar_layout.addWidget(cadastro_group)
+
+        # Seção de Gerenciamento
+        gerenciar_group = QGroupBox("Gerenciamento")
+        gerenciar_layout = QVBoxLayout()
+        btn_meu_est = QPushButton("Alterar informações do estabelecimento")
+        btn_meu_est.clicked.connect(self.show_edit_establishment_screen)
+        gerenciar_layout.addWidget(btn_meu_est)
+        btn_gerenciar_estacionamento = QPushButton("Gerenciar informações do estacionamento")
+        btn_gerenciar_estacionamento.clicked.connect(self.show_manage_parking_screen)
+        gerenciar_layout.addWidget(btn_gerenciar_estacionamento)
+        btn_beneficios = QPushButton("Benefícios")
+        btn_beneficios.clicked.connect(self.show_benefits_screen)
+        gerenciar_layout.addWidget(btn_beneficios)
+        btn_status = QPushButton("Status das vagas")
+        btn_status.clicked.connect(self.show_parking_screen)
+        gerenciar_layout.addWidget(btn_status)
+        btn_settings = QPushButton("Configurações")
+        btn_settings.clicked.connect(self.show_settings_screen)
+        gerenciar_layout.addWidget(btn_settings)
+        btn_sair = QPushButton("Sair")
+        btn_sair.clicked.connect(self.handle_logout)
+        gerenciar_layout.addWidget(btn_sair)
+        gerenciar_group.setLayout(gerenciar_layout)
+        self.sidebar_layout.addWidget(gerenciar_group)
 
         self.sidebar_widget = QWidget()
         self.sidebar_widget.setLayout(self.sidebar_layout)
@@ -59,38 +86,6 @@ class EstablishmentHomeWindow(QWidget):
 
         self.main_layout.addLayout(self.content_layout)
         self.setLayout(self.main_layout)
-
-    def populate_menu(self):
-        user_type = self.auth_controller.get_current_user_type()
-
-        if user_type == "cliente":
-            self.menu_items = [
-                {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
-                {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
-                {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
-                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
-            ]
-
-        elif user_type == "estabelecimento":
-            self.menu_items = [
-                {"text": "Gerenciar meu estabelecimento", "icon": "car-icon.png", "action": self.show_establishment_control_screen},
-                {"text": "Gerenciar status das vagas", "icon": "calendar-icon.png", "action": self.show_parking_screen},
-                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
-            ]
-
-        self.menu_list.clear()
-        for item in self.menu_items:
-            list_item = QListWidgetItem(QIcon(item["icon"]), item["text"])
-            self.menu_list.addItem(list_item)
-        self.menu_list.itemClicked.connect(self.handle_menu_click)
-
-    def handle_menu_click(self, item: QListWidgetItem):
-        for menu_item in self.menu_items:
-            if menu_item["text"] == item.text() and menu_item["action"]:
-                menu_item["action"]()
-    
 
     def create_dashboard_screen(self):
         dashboard_layout = QVBoxLayout()
@@ -116,8 +111,14 @@ class EstablishmentHomeWindow(QWidget):
         animation.setEasingCurve(QEasingCurve.InOutQuad)
         animation.start()
 
-    def show_establishment_control_screen(self):
-        self.screens_controller.set_screen("establishment_control")
+    def show_edit_establishment_screen(self):
+        self.screens_controller.set_screen("establishment_edit")
+
+    def show_manage_parking_screen(self):
+        self.screens_controller.set_screen("establishment_park")
+
+    def show_benefits_screen(self):
+        self.screens_controller.set_screen("establishment_benefits")
 
     def show_parking_screen(self):
         self.screens_controller.set_screen("parking_control")
@@ -129,3 +130,9 @@ class EstablishmentHomeWindow(QWidget):
         self.auth_controller.logout()
         self.screens_controller.set_screen("login")
         QMessageBox.information(self, "Logout", "Você foi desconectado com sucesso.")
+
+    def show_establishment_registration_screen(self):
+        self.screens_controller.set_screen("establishment_register")
+
+    def show_park_registration_screen(self):
+        self.screens_controller.set_screen("establishment_park")

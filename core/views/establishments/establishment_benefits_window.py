@@ -74,6 +74,7 @@ class EstablishmentBenefitsWindow(QWidget):
         list_layout.addWidget(list_title)
 
         self.benefits_list = QListWidget()
+        self.benefits_list.itemDoubleClicked.connect(self.handle_edit_benefit)
         list_layout.addWidget(self.benefits_list)
         
         list_section.setLayout(list_layout)
@@ -145,3 +146,7 @@ class EstablishmentBenefitsWindow(QWidget):
 
     def handle_back(self):
         self.screens_controller.set_screen("establishment_home")
+
+    def handle_edit_benefit(self, item):
+        # Placeholder: abrir tela de edição do benefício
+        QMessageBox.information(self, "Editar Benefício", f"Editar benefício: {item.text()}")

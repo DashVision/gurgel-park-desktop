@@ -21,3 +21,7 @@ class ParkingController:
     def release_spot(self, parking_configuration_id, spot_number):
         """Libera uma vaga ocupada."""
         self.repository.release_spot(parking_configuration_id, spot_number)
+
+    def cancel_reservation(self, parking_configuration_id, spot_number, user_id):
+        """Cancela uma reserva de vaga para o usuário."""
+        self.repository.cancel_reservation(parking_configuration_id, spot_number, user_id)

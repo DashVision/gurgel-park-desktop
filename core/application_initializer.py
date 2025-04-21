@@ -24,6 +24,7 @@ from core.views.establishments.estabilishment_home_window import EstablishmentHo
 from core.views.establishments.establishment_register_window import EstablishmentRegisterWindow
 from core.views.establishments.establishment_benefits_window import EstablishmentBenefitsWindow
 from core.views.establishments.establishment_parking_control_window import EstablishmentParkingControl
+from core.views.establishments.establishment_edit_window import EstablishmentEditWindow
 from core.views.establishments.establishment_park_window import EstablishmentPark
 from core.views.establishments.establishment_control_window import EstablishmentControlWindow
 
@@ -101,6 +102,7 @@ def initialize_application():
         establishment_park_window = EstablishmentPark(screens_controller, parking_controller)
         establishment_control_window = EstablishmentControlWindow(screens_controller)
         status_window = StatusWindow(screens_controller, parking_controller)
+        establishment_edit_window = EstablishmentEditWindow(screens_controller, establishments_controller)
 
         # Adiciona as telas ao controlador
         screens_controller.add_screen("login", login_window)
@@ -118,6 +120,7 @@ def initialize_application():
         screens_controller.add_screen("parking_control", establishment_parking_control_window)
         screens_controller.add_screen("establishment_park", establishment_park_window)
         screens_controller.add_screen("establishment_control", establishment_control_window)
+        screens_controller.add_screen("establishment_edit", establishment_edit_window)
         screens_controller.add_screen("status", status_window)
 
         return screens_controller
