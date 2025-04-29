@@ -13,24 +13,27 @@ class ScreensController(QStackedWidget):
         print(f"Telas atualmente registradas: {list(self.screens.keys())}")  # Log adicional
 
     def set_screen(self, name) -> None:
-        # Lista de telas públicas que não exigem login
         public_screens = ["login", "forgot_password", "register", "confirm_code", "new_password"]
 
         if name in self.screens:
-            # Permite acesso a telas públicas sem verificar login
             if name not in public_screens and not self.is_user_logged_in():
                 print("Acesso negado. Usuário não está logado.")
                 self.set_screen("login")
                 return
 
+            # Verifica o tipo de usuário ao alternar para a tela inicial
+            if name == "home":
+                user_type = self.auth_controller.get_current_user_type()
+                if user_type == "estabelecimento":
+                    name = "establishment_home"
+
             index = self.screens[name]
             print(f"Alternando para a tela: {name} (índice {index})")
-            
-            # Limpa os campos da tela antes de exibi-la
+
             widget = self.widget(index)
             if hasattr(widget, "clear_fields"):
                 widget.clear_fields()
-            
+
             self.setCurrentIndex(index)
         else:
             print(f"Tela '{name}' não encontrada.")

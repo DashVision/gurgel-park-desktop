@@ -61,13 +61,14 @@ class VehiclesController:
 
     def reject_vehicle_share(self, notification_id):
         try:
+            # Remove a notificação
             self.notification_service.clear_notification(notification_id)
 
             # Notifica o solicitante
             notification = self.notification_service.get_notification_by_id(notification_id)
-            requester = self.repository.get_user_by_id(notification["user_id"])
-            vehicle = self.get_vehicle_by_id(notification["vehicle_id"])
-            message = f"Sua solicitação para compartilhar o veículo {vehicle['plate']} foi rejeitada."
+            requester = self.user_repository.get_user_by_id(notification["user_id"])  # Corrigido para usar user_repository
+            vehicle = self.get_vehicle_by_plate(notification["vehicle_id"])
+            message = f"Sua solicitação para compartilhar o veículo {vehicle['placa']} foi rejeitada."
             self.notification_service.add_notification(requester["id"], vehicle["id"], message)
 
             print("Solicitação de compartilhamento rejeitada e notificação enviada ao solicitante.")
