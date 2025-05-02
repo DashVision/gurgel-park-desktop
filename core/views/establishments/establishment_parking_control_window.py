@@ -2,8 +2,9 @@ from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QListWidget,
     QGridLayout, QMessageBox
 )
-from PyQt5.QtCore import QTimer, QDateTime
+from PyQt5.QtCore import QTimer, QDateTime, Qt
 import datetime
+from .establishment_edit_window import EstablishmentEditWindow
 
 class EstablishmentParkingControl(QWidget):
     def __init__(self, screens_controller, parking_controller):

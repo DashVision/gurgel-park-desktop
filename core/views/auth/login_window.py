@@ -9,16 +9,20 @@ class LoginWindow(QWidget):
         print("Inicializando LoginWindow...")  # Log para depuração
         self.screens_controller = screens_controller
         self.auth_controller = auth_controller
+        self.setWindowTitle("Login")
+        self.setFixedSize(360, 640)  # Dimensões fixas para simular um celular
         self.init_ui()
 
     def init_ui(self):
         layout = QVBoxLayout()
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(15)  # Espaçamento entre os elementos
 
         # Estilo geral da janela
         self.setStyleSheet("""
             QWidget {
                 background-color: #f0f2f5;
-                font-family: Arial;
+                font-family: Arial, sans-serif;
             }
         """)
 
@@ -29,12 +33,12 @@ class LoginWindow(QWidget):
             font-size: 24px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         """)
 
-        # Campo Email
+        # Campos de entrada
         self.email_input = QLineEdit()
-        self.email_input.setPlaceholderText("Insira seu email:")
+        self.email_input.setPlaceholderText("Insira seu email")
         self.email_input.setMinimumHeight(40)
         self.email_input.setStyleSheet("""
             QLineEdit {
@@ -50,9 +54,8 @@ class LoginWindow(QWidget):
             }
         """)
 
-        # Campo Senha
         self.password_input = QLineEdit()
-        self.password_input.setPlaceholderText("Insira sua senha:")
+        self.password_input.setPlaceholderText("Insira sua senha")
         self.password_input.setEchoMode(QLineEdit.Password)
         self.password_input.setMinimumHeight(40)
         self.password_input.setStyleSheet("""
@@ -69,7 +72,7 @@ class LoginWindow(QWidget):
             }
         """)
 
-        # Botão Entrar
+        # Botões
         self.login_btn = QPushButton("Entrar")
         self.login_btn.setMinimumHeight(45)
         self.login_btn.setStyleSheet("""
@@ -79,7 +82,7 @@ class LoginWindow(QWidget):
                 border: none;
                 border-radius: 8px;
                 font-size: 16px;
-                padding: 10px;
+                padding: 8px;
             }
             QPushButton:hover {
                 background-color: #45a049;
@@ -87,9 +90,8 @@ class LoginWindow(QWidget):
         """)
         self.login_btn.clicked.connect(self.handle_login)
 
-        # Botão Esqueci minha senha
         self.forgot_password_btn = QPushButton("Esqueci minha senha")
-        self.forgot_password_btn.setMinimumHeight(40)
+        self.forgot_password_btn.setMinimumHeight(35)
         self.forgot_password_btn.setStyleSheet("""
             QPushButton {
                 background-color: #e0e0e0;
@@ -97,7 +99,7 @@ class LoginWindow(QWidget):
                 border: none;
                 border-radius: 8px;
                 font-size: 14px;
-                padding: 8px;
+                padding: 6px;
             }
             QPushButton:hover {
                 background-color: #d5d5d5;
@@ -105,9 +107,8 @@ class LoginWindow(QWidget):
         """)
         self.forgot_password_btn.clicked.connect(self.handle_forgot_password)
 
-        # Botão Registrar nova conta
         self.register_btn = QPushButton("Registrar nova conta")
-        self.register_btn.setMinimumHeight(40)
+        self.register_btn.setMinimumHeight(35)
         self.register_btn.setStyleSheet("""
             QPushButton {
                 background-color: #e0e0e0;
@@ -115,7 +116,7 @@ class LoginWindow(QWidget):
                 border: none;
                 border-radius: 8px;
                 font-size: 14px;
-                padding: 8px;
+                padding: 6px;
             }
             QPushButton:hover {
                 background-color: #d5d5d5;
@@ -123,18 +124,22 @@ class LoginWindow(QWidget):
         """)
         self.register_btn.clicked.connect(self.handle_register)
 
-        # Layout
-        layout.addWidget(title)
-        layout.addWidget(QLabel("Email:", alignment=Qt.AlignCenter))
+        # Adicionando widgets ao layout
+        layout.addWidget(title, alignment=Qt.AlignTop)
         layout.addWidget(self.email_input)
-        layout.addWidget(QLabel("Senha:", alignment=Qt.AlignCenter))
         layout.addWidget(self.password_input)
         layout.addWidget(self.login_btn)
         layout.addWidget(self.forgot_password_btn)
         layout.addWidget(self.register_btn)
-        layout.addStretch()
 
         self.setLayout(layout)
+
+    def center_window(self):
+        """Centraliza a janela na tela."""
+        screen = self.screen().geometry()
+        x = (screen.width() - self.width()) // 2
+        y = (screen.height() - self.height()) // 2
+        self.move(x, y)
 
     def handle_login(self) -> None:
         print("Tentando fazer login...")

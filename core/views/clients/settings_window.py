@@ -6,7 +6,7 @@ from core.controllers.screens_controller import ScreensController
 
 
 class SettingsWindow(QWidget):
-    def __init__(self, screens_controller: ScreensController, auth_controller: AuthController):
+    def __init__(self, screens_controller, auth_controller):
         super().__init__()
         self.screens_controller = screens_controller
         self.auth_controller = auth_controller
@@ -14,17 +14,18 @@ class SettingsWindow(QWidget):
 
     def init_ui(self):
         self.setWindowTitle("Configurações")
-        self.setMinimumSize(600, 400)
+        self.setMinimumSize(360, 500)
+        self.settings_items = [
+            {"text": "Alterar Senha", "action": self.change_password},
+            {"text": "Alterar Email", "action": self.change_email},
+            {"text": "Alterar Tema", "action": self.change_theme},
+            {"text": "Logout", "action": self.handle_logout},
+            {"text": "Excluir Conta", "action": self.exclude_account},
+        ]
 
         layout = QVBoxLayout()
-
-        # Estilo da janela inteira
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #f0f2f5;
-                font-family: Arial;
-            }
-        """)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(15)
 
         # Título
         title = QLabel("Configurações")
@@ -33,40 +34,18 @@ class SettingsWindow(QWidget):
             font-size: 24px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         """)
         layout.addWidget(title)
 
-        # Lista de opções
+        # Crie o QListWidget ANTES de popular
         self.settings_list = QListWidget()
-        self.settings_items = [
-            {"text": "Alterar Senha", "action": self.change_password},
-            {"text": "Alterar Email", "action": self.change_email},
-            {"text": "Alterar Tema", "action": self.change_theme},
-            {"text": "Excluir Conta", "action": self.exclude_account},
-            {"text": "Sair", "action": self.handle_logout}
-        ]
-
-        self.populate_settings_list()
-
         layout.addWidget(self.settings_list)
 
-        # Botão de Voltar
-        self.back_button = QPushButton("Voltar para home")
-        self.back_button.setMinimumHeight(40)
-        self.back_button.setStyleSheet("""
-            QPushButton {
-                background-color: #e0e0e0;
-                color: #333;
-                border: none;
-                border-radius: 8px;
-                font-size: 14px;
-                padding: 8px;
-            }
-            QPushButton:hover {
-                background-color: #d5d5d5;
-            }
-        """)
+        self.populate_settings_list()  # Agora pode chamar
+
+        # Botão de voltar (exemplo)
+        self.back_button = QPushButton("Voltar")
         self.back_button.clicked.connect(self.go_to_home)
         layout.addWidget(self.back_button)
 

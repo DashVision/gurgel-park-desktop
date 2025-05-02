@@ -5,6 +5,7 @@ class ScreensController(QStackedWidget):
     def __init__(self):
         super().__init__()
         self.screens = {}
+        self.setFixedSize(360, 640) 
 
     def add_screen(self, name, widget) -> None:
         index = self.addWidget(widget)
@@ -16,6 +17,12 @@ class ScreensController(QStackedWidget):
         public_screens = ["login", "forgot_password", "register", "confirm_code", "new_password"]
 
         if name in self.screens:
+            if name in public_screens:
+                self.setFixedSize(360, 640)
+            else:
+                self.setMinimumSize(0, 0)
+                self.setMaximumSize(16777215, 16777215)
+
             if name not in public_screens and not self.is_user_logged_in():
                 print("Acesso negado. Usuário não está logado.")
                 self.set_screen("login")

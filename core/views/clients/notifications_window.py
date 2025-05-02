@@ -18,14 +18,13 @@ class NotificationsWindow(QWidget):
         self.timer.start(15000)  # Atualiza notificações a cada 15s
 
     def init_ui(self):
-        self.setWindowTitle("Notificações")
-        self.setMinimumSize(600, 400)
+        layout = QVBoxLayout()
 
-        # Estilização da janela
+        # Estilo geral da janela
         self.setStyleSheet("""
             QWidget {
                 background-color: #f0f2f5;
-                font-family: Arial;
+                font-family: Arial, sans-serif;
             }
         """)
 
@@ -33,13 +32,11 @@ class NotificationsWindow(QWidget):
         title = QLabel("Notificações")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("""
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
         """)
-
-        layout = QVBoxLayout()
         layout.addWidget(title)
 
         # Lista de notificações
@@ -47,35 +44,39 @@ class NotificationsWindow(QWidget):
         self.notifications_list.setStyleSheet("""
             QListWidget {
                 border: 1px solid #ccc;
-                border-radius: 8px;
+                border-radius: 10px;
                 background-color: #fff;
                 padding: 10px;
             }
             QListWidget:item {
-                padding: 10px;
-                font-size: 14px;
+                padding: 15px;
+                font-size: 16px;
                 color: #333;
+            }
+            QListWidget:item:hover {
+                background-color: #f0f0f0;
             }
         """)
         layout.addWidget(self.notifications_list)
 
-        # Botão Voltar para Home
-        self.back_button = QPushButton("Voltar para Home")
-        self.back_button.setStyleSheet("""
+        # Botão de voltar
+        back_button = QPushButton("Voltar")
+        back_button.setMinimumHeight(40)
+        back_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
-                color: white;
+                background-color: #e0e0e0;
+                color: #333;
                 border: none;
-                border-radius: 8px;
+                border-radius: 10px;
                 font-size: 16px;
-                padding: 10px;
+                padding: 8px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: #d5d5d5;
             }
         """)
-        self.back_button.clicked.connect(self.go_to_home)
-        layout.addWidget(self.back_button)
+        back_button.clicked.connect(self.go_to_home)
+        layout.addWidget(back_button)
 
         self.setLayout(layout)
 

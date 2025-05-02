@@ -87,6 +87,7 @@ def initialize_application():
 
         # Instancia as telas
         login_window = LoginWindow(screens_controller, auth_controller)
+        login_window.setFixedSize(360, 640)
         register_window = RegisterWindow(screens_controller)
         forgot_password_window = ForgotPasswordWindow(screens_controller, auth_controller)
         confirm_code_window = ConfirmCodeWindow(screens_controller, auth_controller)

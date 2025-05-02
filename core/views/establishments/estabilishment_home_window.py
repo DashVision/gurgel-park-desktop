@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QPushButton, QGroupBox, QStackedWidget, QMessageBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon
 
 class EstablishmentHomeWindow(QWidget):
