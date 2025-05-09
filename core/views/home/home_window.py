@@ -24,12 +24,12 @@ class HomeWindow(QWidget):
         # Header com botões
         self.header_layout = QHBoxLayout()
         self.menu_button = QPushButton()
-        self.menu_button.setIcon(QIcon("menu-icon.png"))
+        self.menu_button.setIcon(QIcon("core/assets/menu-icon.png"))
         self.menu_button.setFixedSize(40, 40)
         self.menu_button.clicked.connect(self.toggle_sidebar)
 
         self.settings_button = QPushButton()
-        self.settings_button.setIcon(QIcon("settings-icon.png"))
+        self.settings_button.setIcon(QIcon("core/assets/settings-icon.png"))
         self.settings_button.setFixedSize(40, 40)
         self.settings_button.clicked.connect(self.show_settings_screen)
 
@@ -46,11 +46,11 @@ class HomeWindow(QWidget):
         self.sidebar_layout = QVBoxLayout()
         self.menu_list = QListWidget()
         self.menu_items = [
-            {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
-            {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
-            {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
-            {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-            {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+            {"core/assets/text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
+            {"core/assets/text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
+            {"core/assets/text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
+            {"core/assets/text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
+            {"core/assets/text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
         ]
 
         self.populate_menu()

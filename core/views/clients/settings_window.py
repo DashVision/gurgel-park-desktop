@@ -53,7 +53,7 @@ class SettingsWindow(QWidget):
 
     def populate_settings_list(self):
         for item in self.settings_items:
-            list_item = QListWidgetItem(QIcon("settings-icon.png"), item["text"])  # Adiciona um ícone genérico
+            list_item = QListWidgetItem(QIcon("core/assets/settings-icon.png"), item["text"])  # Adiciona um ícone genérico
             self.settings_list.addItem(list_item)
         self.settings_list.itemClicked.connect(self.handle_item_click)
 

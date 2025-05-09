@@ -37,7 +37,7 @@ class HomeWindow(QWidget):
 
         # Botão de menu
         self.menu_button = QPushButton()
-        self.menu_button.setIcon(QIcon("menu-icon.png"))
+        self.menu_button.setIcon(QIcon("core/assets/menu-icon.png"))
         self.menu_button.setFixedSize(40, 40)
         self.menu_button.clicked.connect(self.toggle_sidebar)
         self.menu_button.setStyleSheet("""
@@ -55,7 +55,7 @@ class HomeWindow(QWidget):
 
         # Botão de configurações
         self.settings_button = QPushButton()
-        self.settings_button.setIcon(QIcon("settings-icon.png"))
+        self.settings_button.setIcon(QIcon("core/assets/settings-icon.png"))
         self.settings_button.setFixedSize(40, 40)
         self.settings_button.clicked.connect(self.show_settings_screen)
         self.settings_button.setStyleSheet("""
@@ -101,11 +101,11 @@ class HomeWindow(QWidget):
         """)
 
         self.menu_items = [
-            {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
-            {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
-            {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
-            {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-            {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+            {"text": "Meus Veículos", "icon": "core/assets/car-icon.png", "action": self.show_vehicle_screen},
+            {"text": "Status das vagas", "icon": "core/assets/calendar-icon.png", "action": self.show_status_screen},
+            {"text": "Notificações", "icon": "core/assets/notification-icon.png", "action": self.show_notifications_screen},
+            {"text": "Configurações", "icon": "core/assets/settings-icon.png", "action": self.show_settings_screen},
+            {"text": "Sair", "icon": "core/assets/logout-icon.png", "action": self.handle_logout}
         ]
         self.populate_menu()
 
@@ -137,17 +137,17 @@ class HomeWindow(QWidget):
 
         if user_type == "cliente":
             self.menu_items = [
-                {"text": "Meus Veículos", "icon": "car-icon.png", "action": self.show_vehicle_screen},
-                {"text": "Status das vagas", "icon": "calendar-icon.png", "action": self.show_status_screen},
-                {"text": "Notificações", "icon": "notification-icon.png", "action": self.show_notifications_screen},
-                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+                {"text": "Meus Veículos", "icon": "core/assets/car-icon.png", "action": self.show_vehicle_screen},
+                {"text": "Status das vagas", "icon": "core/assets/calendar-icon.png", "action": self.show_status_screen},
+                {"text": "Notificações", "icon": "core/assets/notification-icon.png", "action": self.show_notifications_screen},
+                {"text": "Configurações", "icon": "core/assets/settings-icon.png", "action": self.show_settings_screen},
+                {"text": "Sair", "icon": "core/assets/logout-icon.png", "action": self.handle_logout}
             ]
         elif user_type == "estabelecimento":
             self.menu_items = [
-                {"text": "Gerenciar Estabelecimento", "icon": "building-icon.png", "action": self.show_establishment_screen},
-                {"text": "Configurações", "icon": "settings-icon.png", "action": self.show_settings_screen},
-                {"text": "Sair", "icon": "logout-icon.png", "action": self.handle_logout}
+                {"text": "Gerenciar Estabelecimento", "icon": "core/assets/building-icon.png", "action": self.show_establishment_screen},
+                {"text": "Configurações", "icon": "core/assets/settings-icon.png", "action": self.show_settings_screen},
+                {"text": "Sair", "icon": "core/assets/logout-icon.png", "action": self.handle_logout}
             ]
 
         self.menu_list.clear()

@@ -25,7 +25,7 @@ class EstablishmentHomeWindow(QWidget):
 
         self.header_layout = QHBoxLayout()
         self.menu_button = QPushButton()
-        self.menu_button.setIcon(QIcon("menu-icon.png"))
+        self.menu_button.setIcon(QIcon("core/assets/menu-icon.png"))
         self.menu_button.setFixedSize(40, 40)
         self.menu_button.setStyleSheet("""
             QPushButton {
@@ -40,7 +40,7 @@ class EstablishmentHomeWindow(QWidget):
         self.menu_button.clicked.connect(self.toggle_sidebar)
 
         self.settings_button = QPushButton()
-        self.settings_button.setIcon(QIcon("settings-icon.png"))
+        self.settings_button.setIcon(QIcon("core/assets/settings-icon.png"))
         self.settings_button.setFixedSize(40, 40)
         self.settings_button.setStyleSheet("""
             QPushButton {
