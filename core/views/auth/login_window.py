@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QMessageBox)
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 
 from core.controllers.auth.auth_controller import AuthController
 
@@ -15,7 +16,7 @@ class LoginWindow(QWidget):
 
     def init_ui(self):
         layout = QVBoxLayout()
-        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(15)  # Espaçamento entre os elementos
 
         # Estilo geral da janela
@@ -26,15 +27,23 @@ class LoginWindow(QWidget):
             }
         """)
 
+        
+
         # Título
         title = QLabel("Login")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("""
             font-size: 24px;
             font-weight: bold;
-            color: #333;
+            color:  rgb(90, 0, 255);
             margin-bottom: 10px;
         """)
+
+        # Logo
+        logo_label = QLabel(self)
+        pixmap = QPixmap("core/assets/logo gurgel park LTDA.png")  # Atualize com o caminho correto
+        logo_label.setPixmap(pixmap)
+        logo_label.setAlignment(Qt.AlignCenter)
 
         # Campos de entrada
         self.email_input = QLineEdit()
@@ -49,8 +58,8 @@ class LoginWindow(QWidget):
                 background-color: #fff;
             }
             QLineEdit:focus {
-                border: 2px solid #4CAF50;
-                background-color: #e8f5e9;
+                border:  rgb(90, 0, 255);
+                background-color:  white;
             }
         """)
 
@@ -67,8 +76,8 @@ class LoginWindow(QWidget):
                 background-color: #fff;
             }
             QLineEdit:focus {
-                border: 2px solid #4CAF50;
-                background-color: #e8f5e9;
+                border:  rgb(90, 0, 255);
+                background-color:  white;
             }
         """)
 
@@ -77,7 +86,7 @@ class LoginWindow(QWidget):
         self.login_btn.setMinimumHeight(45)
         self.login_btn.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color:  rgb(90, 0, 255);
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -85,7 +94,7 @@ class LoginWindow(QWidget):
                 padding: 8px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color:  rgb(90, 0, 255);
             }
         """)
         self.login_btn.clicked.connect(self.handle_login)
@@ -125,7 +134,8 @@ class LoginWindow(QWidget):
         self.register_btn.clicked.connect(self.handle_register)
 
         # Adicionando widgets ao layout
-        layout.addWidget(title, alignment=Qt.AlignTop)
+        layout.addWidget(title)
+        layout.addWidget(logo_label, alignment=Qt.AlignTop)
         layout.addWidget(self.email_input)
         layout.addWidget(self.password_input)
         layout.addWidget(self.login_btn)
