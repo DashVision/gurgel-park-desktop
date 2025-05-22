@@ -73,7 +73,7 @@ class StatusWindow(QWidget):
         self.back_button = QPushButton("Voltar para Home")
         self.back_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #f44336;
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -81,7 +81,7 @@ class StatusWindow(QWidget):
                 padding: 10px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: #f44336;
             }
         """)
         self.back_button.clicked.connect(self.handle_back)

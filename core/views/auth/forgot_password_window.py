@@ -54,8 +54,8 @@ class ForgotPasswordWindow(QWidget):
                 background-color: #fff;
             }
             QLineEdit:focus {
-                border: 2px solid #4CAF50;
-                background-color: #e8f5e9;
+                border: 2px solid rgb(90, 0, 255);
+                background-color: #a6afff;
             }
         """)
 
@@ -64,7 +64,7 @@ class ForgotPasswordWindow(QWidget):
         self.reset_password_btn.setMinimumHeight(45)
         self.reset_password_btn.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: rgb(90, 0, 255);
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -72,7 +72,7 @@ class ForgotPasswordWindow(QWidget):
                 padding: 10px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: rgb(90, 0, 255);
             }
         """)
         self.reset_password_btn.clicked.connect(self.handle_reset_password)

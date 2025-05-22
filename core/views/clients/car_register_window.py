@@ -40,17 +40,17 @@ class CarRegisterWindow(QWidget):
         self.menu_layout.addWidget(menu_label)
 
         my_vehicles_btn = QPushButton("Meus Veículos")
-        my_vehicles_btn.setStyleSheet("padding: 10px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px;")
+        my_vehicles_btn.setStyleSheet("padding: 10px; background-color: #a6afff; color: white; border-radius: 5px; font-size: 16px;")
         my_vehicles_btn.clicked.connect(self.show_my_vehicles)
         self.menu_layout.addWidget(my_vehicles_btn)
 
         new_vehicle_btn = QPushButton("Adicionar Veículo Novo")
-        new_vehicle_btn.setStyleSheet("padding: 10px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px;")
+        new_vehicle_btn.setStyleSheet("padding: 10px; background-color: #a6afff; color: white; border-radius: 5px; font-size: 16px;")
         new_vehicle_btn.clicked.connect(self.show_new_vehicle_form)
         self.menu_layout.addWidget(new_vehicle_btn)
 
         existing_vehicle_btn = QPushButton("Adicionar Veículo Já Cadastrado")
-        existing_vehicle_btn.setStyleSheet("padding: 10px; background-color: #4CAF50; color: white; border-radius: 5px; font-size: 16px;")
+        existing_vehicle_btn.setStyleSheet("padding: 10px; background-color: #a6afff; color: white; border-radius: 5px; font-size: 16px;")
         existing_vehicle_btn.clicked.connect(self.show_existing_vehicle_form)
         self.menu_layout.addWidget(existing_vehicle_btn)
 

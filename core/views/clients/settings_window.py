@@ -46,6 +46,19 @@ class SettingsWindow(QWidget):
 
         # Botão de voltar (exemplo)
         self.back_button = QPushButton("Voltar")
+        self.back_button.setStyleSheet("""
+            QPushButton {
+                background-color: #f44336;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                padding: 8px;
+            }
+            QPushButton:hover {
+                background-color: #f44336;
+            }
+        """)
         self.back_button.clicked.connect(self.go_to_home)
         layout.addWidget(self.back_button)
 
@@ -106,15 +119,15 @@ class SettingsWindow(QWidget):
         cancel_button = QPushButton("Cancelar")
         cancel_button.setStyleSheet("""
             QPushButton {
-                background-color: #e0e0e0;
-                color: #333;
+                background-color: #f44336;
+                color: white;
                 border: none;
                 border-radius: 8px;
                 font-size: 14px;
                 padding: 8px;
             }
             QPushButton:hover {
-                background-color: #d5d5d5;
+                background-color: #f44336;
             }
         """)
         cancel_button.clicked.connect(dialog.reject)
@@ -174,15 +187,15 @@ class SettingsWindow(QWidget):
         cancel_button = QPushButton("Cancelar")
         cancel_button.setStyleSheet("""
             QPushButton {
-                background-color: #e0e0e0;
-                color: #333;
+                background-color: #f44336;
+                color: white;
                 border: none;
                 border-radius: 8px;
                 font-size: 14px;
                 padding: 8px;
             }
             QPushButton:hover {
-                background-color: #d5d5d5;
+                background-color: #f44336;
             }
         """)
         cancel_button.clicked.connect(dialog.reject)

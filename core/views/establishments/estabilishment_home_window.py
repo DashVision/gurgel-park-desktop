@@ -7,6 +7,7 @@ class EstablishmentHomeWindow(QWidget):
         super().__init__()
         self.screens_controller = screens_controller
         self.auth_controller = auth_controller
+        self.is_sidebar_visible = True
         self.init_ui()
 
     def init_ui(self):
@@ -272,12 +273,29 @@ class EstablishmentHomeWindow(QWidget):
         self.is_sidebar_visible = not self.is_sidebar_visible
         target_width = 200 if self.is_sidebar_visible else 0
 
-        animation = QPropertyAnimation(self.sidebar_widget, b"minimumWidth")
-        animation.setDuration(250)
-        animation.setStartValue(self.sidebar_widget.width())
-        animation.setEndValue(target_width)
-        animation.setEasingCurve(QEasingCurve.InOutQuad)
-        animation.start()
+        # Animar minimumWidth
+        self.sidebar_animation = QPropertyAnimation(self.sidebar_widget, b"minimumWidth")
+        self.sidebar_animation.setDuration(250)
+        self.sidebar_animation.setStartValue(self.sidebar_widget.width())
+        self.sidebar_animation.setEndValue(target_width)
+        self.sidebar_animation.setEasingCurve(QEasingCurve.InOutQuad)
+        self.sidebar_animation.start()
+
+        # Animar maximumWidth também
+        self.sidebar_animation2 = QPropertyAnimation(self.sidebar_widget, b"maximumWidth")
+        self.sidebar_animation2.setDuration(250)
+        self.sidebar_animation2.setStartValue(self.sidebar_widget.width())
+        self.sidebar_animation2.setEndValue(target_width)
+        self.sidebar_animation2.setEasingCurve(QEasingCurve.InOutQuad)
+        self.sidebar_animation2.start()
+
+        # Esconder o widget ao final da animação se for fechar
+        if not self.is_sidebar_visible:
+            def hide_sidebar():
+                self.sidebar_widget.setVisible(False)
+            self.sidebar_animation2.finished.connect(hide_sidebar)
+        else:
+            self.sidebar_widget.setVisible(True)
 
     def show_edit_establishment_screen(self):
         self.screens_controller.set_screen("establishment_edit")

@@ -39,20 +39,20 @@ class RegisterWindow(QWidget):
         self.name_input = QLineEdit()
         self.name_input.setPlaceholderText("Nome")
         self.name_input.setMinimumHeight(40)
-        self.name_input.setStyleSheet("padding: 10px; font-size: 16px;")
+        self.name_input.setStyleSheet("border: 2px solid rgb(90, 0, 255); border-radius: 8px;padding: 10px; font-size: 16px; ")
         layout.addWidget(self.name_input)
 
         self.email_input = QLineEdit()
         self.email_input.setPlaceholderText("Email")
         self.email_input.setMinimumHeight(40)
-        self.email_input.setStyleSheet("padding: 10px; font-size: 16px;")
+        self.email_input.setStyleSheet("border: 2px solid rgb(90, 0, 255); border-radius: 8px;padding: 10px; font-size: 16px;")
         layout.addWidget(self.email_input)
 
         self.password_input = QLineEdit()
         self.password_input.setPlaceholderText("Senha")
         self.password_input.setEchoMode(QLineEdit.Password)
         self.password_input.setMinimumHeight(40)
-        self.password_input.setStyleSheet("padding: 10px; font-size: 16px;")
+        self.password_input.setStyleSheet("border: 2px solid rgb(90, 0, 255); border-radius: 8px;padding: 10px; font-size: 16px;")
         layout.addWidget(self.password_input)
 
         # ComboBox para selecionar o tipo de usuário
@@ -64,11 +64,11 @@ class RegisterWindow(QWidget):
                 border-radius: 8px;
                 padding: 8px;
                 font-size: 16px;
-                background-color: #fff;
+                background-color: #a6afff;
             }
             QComboBox:focus {
-                border: 2px solid #4CAF50;
-                background-color: #e8f5e9;
+                border: 2px solid rgb(90, 0, 255);
+                background-color: #a6afff;
             }
         """)
         layout.addWidget(QLabel("Tipo de Usuário:", alignment=Qt.AlignCenter))
@@ -77,14 +77,21 @@ class RegisterWindow(QWidget):
         # Botão para registrar nova conta
         self.register_new_user_btn = QPushButton("Registrar nova conta")
         self.register_new_user_btn.setMinimumHeight(45)
-        self.register_new_user_btn.setStyleSheet("background-color: #4CAF50; color: white; padding: 10px; font-size: 16px;")
+        self.register_new_user_btn.setStyleSheet("""
+                border: 2px solid #ccc;
+                border-radius: 8px;
+                padding: 8px;
+                font-size: 16px;
+                color: white; 
+                background-color: rgb(90, 0, 255);
+        """)
         self.register_new_user_btn.clicked.connect(self.handle_register_new_user)
         layout.addWidget(self.register_new_user_btn)
 
         # Botão para voltar ao login
         self.return_to_login_btn = QPushButton("Voltar para Login")
         self.return_to_login_btn.setMinimumHeight(40)
-        self.return_to_login_btn.setStyleSheet("background-color: #e0e0e0; padding: 8px; font-size: 14px;")
+        self.return_to_login_btn.setStyleSheet("background-color: #f44336; color: white; border: 2px solid #ccc; border-radius: 8px; padding: 8px; font-size: 14px;")
         self.return_to_login_btn.clicked.connect(self.handle_return_to_login)
         layout.addWidget(self.return_to_login_btn)
 

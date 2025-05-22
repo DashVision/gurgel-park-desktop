@@ -42,14 +42,14 @@ class HomeWindow(QWidget):
         self.menu_button.clicked.connect(self.toggle_sidebar)
         self.menu_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #a6afff;
                 color: white;
                 border: none;
                 border-radius: 8px;
                 padding: 10px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color:  #a6afff;
             }
         """)
 
@@ -60,14 +60,14 @@ class HomeWindow(QWidget):
         self.settings_button.clicked.connect(self.show_settings_screen)
         self.settings_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #a6afff;
                 color: white;
                 border: none;
                 border-radius: 8px;
                 padding: 10px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: #a6afff;
             }
         """)
 
@@ -86,7 +86,7 @@ class HomeWindow(QWidget):
         self.menu_list = QListWidget()
         self.menu_list.setStyleSheet("""
             QListWidget {
-                background-color: #2c2f38;
+                background-color: #a6afff;
                 color: white;
                 font-size: 14px;
                 border: none;
@@ -96,7 +96,7 @@ class HomeWindow(QWidget):
                 padding: 15px;
             }
             QListWidget::item:selected {
-                background-color: #575757;
+                background-color: #a6afff;
             }
         """)
 
@@ -117,7 +117,7 @@ class HomeWindow(QWidget):
         self.sidebar_widget.setMaximumWidth(200)
         self.sidebar_widget.setStyleSheet("""
             QWidget {
-                background-color: #2c2f38;
+                background-color: #a6afff;
             }
         """)
 
@@ -199,13 +199,30 @@ class HomeWindow(QWidget):
         self.is_sidebar_visible = not self.is_sidebar_visible
         target_width = 200 if self.is_sidebar_visible else 0
 
-        # Animação para alterar a largura da barra lateral
-        animation = QPropertyAnimation(self.sidebar_widget, b"minimumWidth")
-        animation.setDuration(250)
-        animation.setStartValue(self.sidebar_widget.width())
-        animation.setEndValue(target_width)
-        animation.setEasingCurve(QEasingCurve.InOutQuad)
-        animation.start()
+        # Animar minimumWidth
+        self.sidebar_animation = QPropertyAnimation(self.sidebar_widget, b"minimumWidth")
+        self.sidebar_animation.setDuration(250)
+        self.sidebar_animation.setStartValue(self.sidebar_widget.width())
+        self.sidebar_animation.setEndValue(target_width)
+        self.sidebar_animation.setEasingCurve(QEasingCurve.InOutQuad)
+        self.sidebar_animation.start()
+
+        # Animar maximumWidth também
+        self.sidebar_animation2 = QPropertyAnimation(self.sidebar_widget, b"maximumWidth")
+        self.sidebar_animation2.setDuration(250)
+        self.sidebar_animation2.setStartValue(self.sidebar_widget.width())
+        self.sidebar_animation2.setEndValue(target_width)
+        self.sidebar_animation2.setEasingCurve(QEasingCurve.InOutQuad)
+        self.sidebar_animation2.start()
+
+        # Esconder o widget ao final da animação se for fechar
+        if not self.is_sidebar_visible:
+            def hide_sidebar():
+                self.sidebar_widget.setVisible(False)
+            self.sidebar_animation2.finished.connect(hide_sidebar)
+        else:
+            self.sidebar_widget.setVisible(True)
+
 
     def show_vehicle_screen(self):
         self.screens_controller.set_screen("car_register")

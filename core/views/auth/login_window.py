@@ -27,8 +27,6 @@ class LoginWindow(QWidget):
             }
         """)
 
-        
-
         # Título
         title = QLabel("Login")
         title.setAlignment(Qt.AlignCenter)
@@ -51,15 +49,14 @@ class LoginWindow(QWidget):
         self.email_input.setMinimumHeight(40)
         self.email_input.setStyleSheet("""
             QLineEdit {
-                border: 2px solid #ccc;
+                border: 2px solid #979797;
                 border-radius: 8px;
                 padding: 8px;
                 font-size: 16px;
-                background-color: #fff;
+                background-color: #a6afff;
             }
             QLineEdit:focus {
-                border:  rgb(90, 0, 255);
-                background-color:  white;
+                border: 2px solid rgb(90, 0, 255);
             }
         """)
 
@@ -69,15 +66,14 @@ class LoginWindow(QWidget):
         self.password_input.setMinimumHeight(40)
         self.password_input.setStyleSheet("""
             QLineEdit {
-                border: 2px solid #ccc;
+                border: 2px solid #979797;
                 border-radius: 8px;
                 padding: 8px;
                 font-size: 16px;
-                background-color: #fff;
+                background-color: #a6afff;
             }
             QLineEdit:focus {
-                border:  rgb(90, 0, 255);
-                background-color:  white;
+                border: 2px solid rgb(90, 0, 255);
             }
         """)
 

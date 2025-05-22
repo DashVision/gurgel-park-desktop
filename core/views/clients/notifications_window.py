@@ -64,15 +64,15 @@ class NotificationsWindow(QWidget):
         back_button.setMinimumHeight(40)
         back_button.setStyleSheet("""
             QPushButton {
-                background-color: #e0e0e0;
-                color: #333;
+                background-color: #f44336;
+                color: white;
                 border: none;
                 border-radius: 10px;
                 font-size: 16px;
                 padding: 8px;
             }
             QPushButton:hover {
-                background-color: #d5d5d5;
+                background-color: #f44336;
             }
         """)
         back_button.clicked.connect(self.go_to_home)
